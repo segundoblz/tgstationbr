@@ -3,26 +3,28 @@ import { formatMoney } from 'tgui-core/format';
 import { decodeHtmlEntities } from 'tgui-core/string';
 
 import { useBackend } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import type { CargoData } from './types';
 
 export function CargoRequests(props) {
   const { act, data } = useBackend<CargoData>();
+  const { t } = useTranslation();
   const { requests = [], requestonly, can_send, can_approve_requests, displayed_currency_name} = data;
 
   return (
     <Section fill scrollable>
-      {requests.length === 0 && <NoticeBox success>No Requests</NoticeBox>}
+      {requests.length === 0 && <NoticeBox success>{t('No Requests')}</NoticeBox>}
       {requests.length > 0 && (
         <Table>
           <Table.Row header color="gray">
             <Table.Cell>ID</Table.Cell>
-            <Table.Cell>Object</Table.Cell>
-            <Table.Cell>Orderer</Table.Cell>
-            <Table.Cell>Reason</Table.Cell>
-            <Table.Cell>Account</Table.Cell>
-            <Table.Cell>Cost</Table.Cell>
+            <Table.Cell>{t('Object')}</Table.Cell>
+            <Table.Cell>{t('Orderer')}</Table.Cell>
+            <Table.Cell>{t('Reason')}</Table.Cell>
+            <Table.Cell>{t('Account')}</Table.Cell>
+            <Table.Cell>{t('Cost')}</Table.Cell>
             {(!requestonly || !!can_send) && !!can_approve_requests && (
-              <Table.Cell>Actions</Table.Cell>
+              <Table.Cell>{t('Actions')}</Table.Cell>
             )}
           </Table.Row>
 

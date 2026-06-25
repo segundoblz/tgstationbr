@@ -14,6 +14,7 @@ import {
 import { formatMoney } from 'tgui-core/format';
 
 import { useBackend, useSharedState } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import { SearchBar } from '../common/SearchBar';
 import { searchForSupplies } from './helpers';
 import type { CargoData, Supply, SupplyCategory } from './types';
@@ -95,6 +96,7 @@ type CatalogTabsProps = {
 
 function CatalogTabs(props: CatalogTabsProps & Props) {
   const { act, data } = useBackend<CargoData>();
+  const { t } = useTranslation();
   const {
     activeSupplyName,
     categories,
@@ -163,10 +165,10 @@ function CatalogTabs(props: CatalogTabsProps & Props) {
             color={self_paid ? 'caution' : 'transparent'}
             icon={self_paid ? 'check-square-o' : 'square-o'}
             onClick={() => act('toggleprivate')}
-            tooltip="Use your own funds to purchase items."
+            tooltip={t('Use your own funds to purchase items.')}
             tooltipPosition="top"
           >
-            Buy Privately
+            {t('Buy Privately')}
           </Button>
         )}
       </Stack.Item>
@@ -181,6 +183,7 @@ type CatalogListProps = {
 
 function CatalogList(props: CatalogListProps) {
   const { act, data } = useBackend<CargoData>();
+  const { t } = useTranslation();
   const { cart = [], max_order, self_paid, app_cost, displayed_currency_name } = data;
   const { packs = [], openContents } = props;
 
@@ -244,11 +247,11 @@ function CatalogList(props: CatalogListProps) {
                 <Stack.Item>
                   <Stack reverse>
                     {!!pack.small_item &&
-                      tooltipIcon('Small Item', 'compress-alt', 'purple')}
+                      tooltipIcon(t('Small Item'), 'compress-alt', 'purple')}
                     {!!pack.access &&
-                      tooltipIcon('Restricted', 'lock', 'average')}
+                      tooltipIcon(t('Restricted'), 'lock', 'average')}
                     {!!pack.contraband &&
-                      tooltipIcon('Contraband', 'pastafarianism', 'bad')}
+                      tooltipIcon(t('Contraband'), 'pastafarianism', 'bad')}
                   </Stack>
                 </Stack.Item>
               )}
@@ -282,6 +285,7 @@ type CatalogContentsProps = {
 };
 
 function CatalogPackInfo(props: CatalogContentsProps) {
+  const { t } = useTranslation();
   const { name, packs, closeContents } = props;
   const pack = packs.find((pack) => pack.name === name);
   const contains = pack?.contains;
@@ -301,7 +305,7 @@ function CatalogPackInfo(props: CatalogContentsProps) {
               />
             }
           >
-            <BlockQuote>{pack?.desc || 'No description available.'}</BlockQuote>
+            <BlockQuote>{pack?.desc || t('No description available.')}</BlockQuote>
           </Section>
         </Stack.Item>
         <Stack.Item m={0} grow>
@@ -333,8 +337,9 @@ function CatalogPackInfo(props: CatalogContentsProps) {
                   <Icon name="triangle-exclamation" size={6} color="orange" />
                 </Stack.Item>
                 <Stack.Item mt={2} color="label" textAlign="center">
-                  {`We can't find information about even the approximate contents
-                  of this order.`}
+                  {t(
+                    "We can't find information about even the approximate contents of this order.",
+                  )}
                 </Stack.Item>
               </Stack>
             )}
