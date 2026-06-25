@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Box, Section, Stack, TextArea } from 'tgui-core/components';
-import { isEscape } from 'tgui-core/keys';
-import { KEY } from 'tgui-core/keys';
+import { isEscape, KEY } from 'tgui-core/keys';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { Window } from '../layouts';
 import { InputButtons } from './common/InputButtons';
 import { Loader } from './common/Loader';
@@ -28,6 +28,7 @@ export const removeAllSkiplines = (toSanitize: string) => {
 
 export const TextInputModal = (props) => {
   const { act, data } = useBackend<TextInputData>();
+  const { t } = useTranslation();
   const {
     large_buttons,
     max_length,
@@ -72,7 +73,7 @@ export const TextInputModal = (props) => {
   const char_length = [...input].length;
 
   return (
-    <Window title={title} width={325} height={windowHeight}>
+    <Window title={t(title)} width={325} height={windowHeight}>
       {timeout && <Loader value={timeout} />}
       <Window.Content onKeyDown={handleKeyDown}>
         <Section fill>
@@ -89,7 +90,7 @@ export const TextInputModal = (props) => {
                 maxLength={max_length}
                 onEscape={() => act('cancel')}
                 onChange={onType}
-                placeholder="Type something..."
+                placeholder={t('Type something...')}
                 value={input}
               />
             </Stack.Item>

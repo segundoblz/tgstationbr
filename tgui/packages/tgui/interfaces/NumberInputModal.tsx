@@ -10,6 +10,7 @@ import { isEscape, KEY } from 'tgui-core/keys';
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { Window } from '../layouts';
 import { InputButtons } from './common/InputButtons';
 import { Loader } from './common/Loader';
@@ -27,6 +28,7 @@ type Data = {
 
 export function NumberInputModal(props) {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const {
     init_value,
     large_buttons,
@@ -57,7 +59,7 @@ export function NumberInputModal(props) {
   }
 
   return (
-    <Window title={title} width={270} height={windowHeight}>
+    <Window title={t(title)} width={270} height={windowHeight}>
       {timeout && <Loader value={timeout} />}
       <Window.Content onKeyDown={handleKeyDown}>
         <Section fill>
@@ -72,7 +74,11 @@ export function NumberInputModal(props) {
                     disabled={value === min_value}
                     icon="angle-double-left"
                     onClick={() => setValue(min_value ?? 0)}
-                    tooltip={min_value ? `Min (${min_value})` : 'Min'}
+                    tooltip={
+                      min_value
+                        ? t('Min ({value})', { value: String(min_value) })
+                        : t('Min')
+                    }
                   />
                 </Stack.Item>
 
@@ -111,7 +117,11 @@ export function NumberInputModal(props) {
                     disabled={value === max_value}
                     icon="angle-double-right"
                     onClick={() => setValue(max_value ?? 10000)}
-                    tooltip={max_value ? `Max (${max_value})` : 'Max'}
+                    tooltip={
+                      max_value
+                        ? t('Max ({value})', { value: String(max_value) })
+                        : t('Max')
+                    }
                   />
                 </Stack.Item>
                 <Stack.Item>
@@ -119,7 +129,11 @@ export function NumberInputModal(props) {
                     disabled={value === init_value}
                     icon="redo"
                     onClick={() => setValue(init_value ?? 0)}
-                    tooltip={init_value ? `Reset (${init_value})` : 'Reset'}
+                    tooltip={
+                      init_value
+                        ? t('Reset ({value})', { value: String(init_value) })
+                        : t('Reset')
+                    }
                   />
                 </Stack.Item>
               </Stack>

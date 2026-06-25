@@ -1,6 +1,7 @@
 import { Box, Button, Flex } from 'tgui-core/components';
 
 import { useBackend } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 
 type InputButtonsData = {
   large_buttons: boolean;
@@ -19,6 +20,7 @@ type InputButtonsProps = {
 
 export const InputButtons = (props: InputButtonsProps) => {
   const { act, data } = useBackend<InputButtonsData>();
+  const { t } = useTranslation();
   const { large_buttons, swapped_buttons } = data;
   const { input, message, on_submit, on_cancel, disabled } = props;
 
@@ -51,7 +53,7 @@ export const InputButtons = (props: InputButtonsProps) => {
       tooltip={large_buttons && message}
       width={!large_buttons && 6}
     >
-      {large_buttons ? 'SUBMIT' : 'Submit'}
+      {large_buttons ? t('Submit').toUpperCase() : t('Submit')}
     </Button>
   );
   const cancelButton = (
@@ -67,7 +69,7 @@ export const InputButtons = (props: InputButtonsProps) => {
       textAlign="center"
       width={!large_buttons && 6}
     >
-      {large_buttons ? 'CANCEL' : 'Cancel'}
+      {large_buttons ? t('Cancel').toUpperCase() : t('Cancel')}
     </Button>
   );
 

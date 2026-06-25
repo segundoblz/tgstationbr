@@ -4,6 +4,7 @@ import { isEscape, KEY } from 'tgui-core/keys';
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { Window } from '../layouts';
 import { Loader } from './common/Loader';
 
@@ -24,6 +25,7 @@ enum DIRECTION {
 
 export function AlertModal(props) {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const {
     autofocus,
     buttons = [],
@@ -51,9 +53,10 @@ export function AlertModal(props) {
   const paddingMagicNumber = 67 / buttons.length + 23;
 
   // At least one of the buttons has a long text message
+  // Measure the translated label so the layout matches what's displayed.
   const isVerbose = buttons.some(
     (button) =>
-      textWidth(button, 'Verdana, Geneva', large_buttons ? 14 : 12) > // 14 is the larger font size for large buttons
+      textWidth(t(button), 'Verdana, Geneva', large_buttons ? 14 : 12) > // 14 is the larger font size for large buttons
       windowWidth / buttons.length - paddingMagicNumber,
   );
   const largeSpacing = isVerbose && large_buttons ? 20 : 15;
@@ -97,7 +100,7 @@ export function AlertModal(props) {
   }
 
   return (
-    <Window height={windowHeight} title={title} width={windowWidth}>
+    <Window height={windowHeight} title={t(title)} width={windowWidth}>
       {!!timeout && <Loader value={timeout} />}
       <Window.Content onKeyDown={keyDownHandler}>
         <Section fill>
@@ -131,6 +134,7 @@ type ButtonDisplayProps = {
  */
 function HorizontalButtons(props: ButtonDisplayProps) {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { buttons = [], large_buttons, swapped_buttons } = data;
   const { selected } = props;
 
@@ -148,7 +152,7 @@ function HorizontalButtons(props: ButtonDisplayProps) {
             selected={selected === index}
             textAlign="center"
           >
-            {!large_buttons ? button : button.toUpperCase()}
+            {!large_buttons ? t(button) : t(button).toUpperCase()}
           </Button>
         </Stack.Item>
       ))}
@@ -162,6 +166,7 @@ function HorizontalButtons(props: ButtonDisplayProps) {
  */
 function VerticalButtons(props: ButtonDisplayProps) {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { buttons = [], large_buttons, swapped_buttons } = data;
   const { selected } = props;
 
@@ -190,7 +195,7 @@ function VerticalButtons(props: ButtonDisplayProps) {
             selected={selected === index}
             textAlign="center"
           >
-            {!large_buttons ? button : button.toUpperCase()}
+            {!large_buttons ? t(button) : t(button).toUpperCase()}
           </Button>
         </Stack.Item>
       ))}

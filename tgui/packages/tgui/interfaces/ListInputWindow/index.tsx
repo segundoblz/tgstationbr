@@ -1,4 +1,5 @@
 import { useBackend } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import { Window } from '../../layouts';
 import { Loader } from '../common/Loader';
 import { ListInputModal } from './ListInputModal';
@@ -14,6 +15,7 @@ type ListInputData = {
 
 export const ListInputWindow = () => {
   const { act, data } = useBackend<ListInputData>();
+  const { t } = useTranslation();
   const {
     items = [],
     message = '',
@@ -28,7 +30,7 @@ export const ListInputWindow = () => {
     325 + Math.ceil(message.length / 3) + (large_buttons ? 5 : 0);
 
   return (
-    <Window title={title} width={325} height={windowHeight}>
+    <Window title={t(title)} width={325} height={windowHeight}>
       {timeout && <Loader value={timeout} />}
       <Window.Content>
         <ListInputModal

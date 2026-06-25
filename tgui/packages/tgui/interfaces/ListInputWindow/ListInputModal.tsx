@@ -9,6 +9,7 @@ import {
   KEY_Z,
 } from 'tgui-core/keycodes';
 
+import { useTranslation } from '../../i18n/useTranslation';
 import { InputButtons } from '../common/InputButtons';
 
 type ListInputModalProps = {
@@ -21,6 +22,7 @@ type ListInputModalProps = {
 
 export const ListInputModal = (props: ListInputModalProps) => {
   const { items = [], default_item, message, on_selected, on_cancel } = props;
+  const { t } = useTranslation();
 
   const [selected, setSelected] = useState(items.indexOf(default_item));
   const [searchBarVisible, setSearchBarVisible] = useState(items.length > 9);
@@ -132,8 +134,12 @@ export const ListInputModal = (props: ListInputModalProps) => {
           selected
           tooltip={
             searchBarVisible
-              ? 'Search Mode. Type to search or use arrow keys to select manually.'
-              : 'Hotkey Mode. Type a letter to jump to the first match. Enter to select.'
+              ? t(
+                  'Search Mode. Type to search or use arrow keys to select manually.',
+                )
+              : t(
+                  'Hotkey Mode. Type a letter to jump to the first match. Enter to select.',
+                )
           }
           tooltipPosition="left"
           onClick={() => onSearchBarToggle()}
@@ -161,7 +167,7 @@ export const ListInputModal = (props: ListInputModalProps) => {
             fluid
             onEnter={() => on_selected(filteredItems[selected])}
             onChange={onSearch}
-            placeholder="Search..."
+            placeholder={t('Search...')}
             value={searchQuery}
           />
         )}
