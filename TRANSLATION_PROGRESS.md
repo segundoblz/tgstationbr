@@ -2,8 +2,8 @@
 
 ## Status Geral
 
-- **Fase atual:** Fase 1 (Infraestrutura) + início Fase 2 (UI)
-- **Strings traduzidas:** ~120 (estimativa inicial)
+- **Fase atual:** Fase 2 (Tradução de UI) em andamento
+- **Strings traduzidas:** ~165 (UI base + interfaces VotePanel/Vending)
 - **Total estimado:** ~10.000-15.000 strings
 
 ## Infraestrutura
@@ -28,7 +28,7 @@
 | `strings/translations/pt-br/balloon.json` | ~47 | Completo (balloon alerts comuns) |
 | `strings/translations/pt-br/jobs_display.json` | ~43 | Completo (jobs principais) |
 | `strings/translations/pt-br/chat.json` | ~13 | Parcial (mensagens básicas) |
-| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~102 | Completo (strings base + inputs) |
+| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~144 | Completo (base + inputs + votação + vending) |
 
 ## Arquivos Traduzidos
 
@@ -42,6 +42,8 @@
 | `tgui/packages/tgui/interfaces/KeyComboModal.tsx` | Completo | "Awaiting input..." + título |
 | `tgui/packages/tgui/interfaces/CheckboxInput.tsx` | Completo | Min/Max + busca + título |
 | `tgui/packages/tgui/interfaces/ListInputWindow/` | Completo | placeholder + tooltips de modo + título |
+| `tgui/packages/tgui/interfaces/VotePanel.tsx` | Completo | Painel de votação — títulos, botões, avisos, contadores (interpolados) |
+| `tgui/packages/tgui/interfaces/Vending.tsx` | Completo | Vendomatos — título, busca, preço (GRÁTIS), estoque, categorias via `t(name)` |
 
 ## Decisões de Design
 
@@ -64,9 +66,15 @@
 ### Fase 2 — Tradução de UI (prioridade)
 - [x] AlertModal.tsx — traduzir botões via `useTranslation()`
 - [x] `tgui_input` (frontend) — todos os modais: text, number, keycombo, checkbox, list + InputButtons compartilhado
-- [ ] Interfaces TGUI mais usadas (PreferencesMenu, VotePanel, Vending, etc.)
+- [x] VotePanel.tsx — painel de votação (alta visibilidade, todos os jogadores)
+- [x] Vending.tsx — vendomatos (uso constante na rodada)
+- [ ] Próximas interfaces TGUI: PreferencesMenu, Crafting, NtOS/PDA, Cargo
 - [ ] Balloon alerts — aplicar `T()` nos mais comuns
 - [ ] Job display names — aplicar nos contextos de display
+
+> **Nota sobre categorias de vending (`Vending.tsx`):** os nomes de categoria vêm do servidor (`product_categories`). São exibidos via `t(name)` — as universais (`Contraband`, `Premium`) e genéricas comuns estão em `pt-br.json`; nomes sem tradução caem no fallback (inglês). A chave de cor `CATEGORY_COLORS` e a seleção continuam usando o `name` original em inglês.
+>
+> **Colisão de chave resolvida (`Vote`):** "Vote" (botão) → "Votar"; o rótulo por opção usa a chave distinta `"{name} Vote"` → "Votação de {name}", evitando conflito de tradução para a mesma palavra.
 
 > **Nota sobre `tgui_input` (DM):** os títulos default (`"Select"`, `"Text Input"`, `"Number Input"`, `"Key Input"`) vêm dos procs em `code/modules/tgui_input/*.dm`, mas são traduzidos no **frontend** via `t(title)` — sem modificar o DM, mantendo merge-friendly. As chaves correspondentes estão em `pt-br.json`.
 

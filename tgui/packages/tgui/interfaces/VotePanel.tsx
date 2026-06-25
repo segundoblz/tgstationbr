@@ -13,6 +13,7 @@ import {
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { Window } from '../layouts';
 
 enum VoteConfig {
@@ -68,9 +69,10 @@ type Data = {
 
 export const VotePanel = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { currentVote, user, LastVoteTime, VoteCD } = data;
 
-  let windowTitle = 'Vote';
+  let windowTitle = t('Vote');
   if (currentVote) {
     windowTitle +=
       ': ' +
@@ -85,7 +87,7 @@ export const VotePanel = (props) => {
         <Stack vertical fill>
           <Stack.Item>
             <Section
-              title="New Vote"
+              title={t('New Vote')}
               buttons={
                 !!user.isLowerAdmin && (
                   <Stack>
@@ -95,7 +97,7 @@ export const VotePanel = (props) => {
                         disabled={LastVoteTime + VoteCD <= 0}
                         onClick={() => act('resetCooldown')}
                       >
-                        Reset cooldown
+                        {t('Reset cooldown')}
                       </Button>
                     </Stack.Item>
                     <Stack.Item>
@@ -105,7 +107,7 @@ export const VotePanel = (props) => {
                         checked={!data.deadVoteEnabled}
                         color="primary"
                       >
-                        Dead votes
+                        {t('Dead votes')}
                       </Button.Checkbox>
                     </Stack.Item>
                   </Stack>
@@ -116,7 +118,7 @@ export const VotePanel = (props) => {
             </Section>
           </Stack.Item>
           <Stack.Item grow>
-            <Section fill scrollable title="Active Vote">
+            <Section fill scrollable title={t('Active Vote')}>
               <ChoicesPanel />
             </Section>
           </Stack.Item>
@@ -133,13 +135,14 @@ export const VotePanel = (props) => {
 
 const VoteOptionDimmer = (props) => {
   const { data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { LastVoteTime, VoteCD } = data;
 
   return (
     <Dimmer>
       <Box textAlign="center">
         <Box fontSize={2} bold>
-          Vote Cooldown
+          {t('Vote Cooldown')}
         </Box>
         <Box fontSize={1.5}>{Math.floor((VoteCD + LastVoteTime) / 10)}s</Box>
       </Box>
@@ -149,6 +152,7 @@ const VoteOptionDimmer = (props) => {
 
 const VoteOptions = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { possibleVotes, user, LastVoteTime, VoteCD } = data;
 
   return (
@@ -171,7 +175,7 @@ const VoteOptions = (props) => {
                     }
                     tooltip={
                       option.config === VoteConfig.None
-                        ? 'This vote cannot be disabled.'
+                        ? t('This vote cannot be disabled.')
                         : null
                     }
                     onClick={() =>
@@ -180,7 +184,7 @@ const VoteOptions = (props) => {
                       })
                     }
                   >
-                    Active
+                    {t('Active')}
                   </Button.Checkbox>
                 </Stack.Item>
               )}
@@ -198,7 +202,7 @@ const VoteOptions = (props) => {
               <Stack.Item>
                 <Tooltip content={option.message}>
                   <BlockQuote style={{ lineHeight: '1.7em' }}>
-                    {option.name} Vote
+                    {t('{name} Vote', { name: option.name })}
                   </BlockQuote>
                 </Tooltip>
               </Stack.Item>
@@ -212,12 +216,13 @@ const VoteOptions = (props) => {
 
 const ChoicesPanel = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { currentVote, user } = data;
 
   return (
     <>
       {currentVote && currentVote.countMethod === VoteSystem.VOTE_SINGLE ? (
-        <NoticeBox success>Select one option</NoticeBox>
+        <NoticeBox success>{t('Select one option')}</NoticeBox>
       ) : null}
       {currentVote &&
       currentVote.choices.length !== 0 &&
@@ -231,7 +236,8 @@ const ChoicesPanel = (props) => {
                 buttons={
                   <Button
                     tooltip={
-                      user.isGhost && 'Ghost voting was disabled by an admin.'
+                      user.isGhost &&
+                      t('Ghost voting was disabled by an admin.')
                     }
                     disabled={
                       user.singleSelection === choice.name || user.isGhost
@@ -240,7 +246,7 @@ const ChoicesPanel = (props) => {
                       act('voteSingle', { voteOption: choice.name });
                     }}
                   >
-                    Vote
+                    {t('Vote')}
                   </Button>
                 }
               >
@@ -248,7 +254,9 @@ const ChoicesPanel = (props) => {
                   choice.name === user.singleSelection && (
                     <Icon align="right" mr={2} color="green" name="vote-yea" />
                   )}
-                {currentVote.displayStatistics ? `${choice.votes} Votes` : null}
+                {currentVote.displayStatistics
+                  ? t('{count} Votes', { count: String(choice.votes) })
+                  : null}
               </LabeledList.Item>
               <LabeledList.Divider />
             </Box>
@@ -256,7 +264,7 @@ const ChoicesPanel = (props) => {
         </LabeledList>
       ) : null}
       {currentVote && currentVote.countMethod === VoteSystem.VOTE_MULTI ? (
-        <NoticeBox success>Select any number of options</NoticeBox>
+        <NoticeBox success>{t('Select any number of options')}</NoticeBox>
       ) : null}
       {currentVote &&
       currentVote.choices.length !== 0 &&
@@ -270,14 +278,15 @@ const ChoicesPanel = (props) => {
                 buttons={
                   <Button
                     tooltip={
-                      user.isGhost && 'Ghost voting was disabled by an admin.'
+                      user.isGhost &&
+                      t('Ghost voting was disabled by an admin.')
                     }
                     disabled={user.isGhost}
                     onClick={() => {
                       act('voteMulti', { voteOption: choice.name });
                     }}
                   >
-                    Vote
+                    {t('Vote')}
                   </Button>
                 }
               >
@@ -285,20 +294,21 @@ const ChoicesPanel = (props) => {
                 user.multiSelection[user.ckey.concat(choice.name)] === 1 ? (
                   <Icon align="right" mr={2} color="blue" name="vote-yea" />
                 ) : null}
-                {choice.votes} Votes
+                {t('{count} Votes', { count: String(choice.votes) })}
               </LabeledList.Item>
               <LabeledList.Divider />
             </Box>
           ))}
         </LabeledList>
       ) : null}
-      {currentVote ? null : <NoticeBox>No vote active!</NoticeBox>}
+      {currentVote ? null : <NoticeBox>{t('No vote active!')}</NoticeBox>}
     </>
   );
 };
 
 const TimePanel = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { currentVote, user } = data;
 
   return (
@@ -306,8 +316,10 @@ const TimePanel = (props) => {
       <Stack justify="space-between">
         <Box fontSize={1.5}>
           {currentVote
-            ? `Time remaining: ${currentVote.timeRemaining}s`
-            : 'No current vote'}
+            ? t('Time remaining: {time}s', {
+                time: String(currentVote.timeRemaining),
+              })
+            : t('No current vote')}
         </Box>
         {!!user.isLowerAdmin && (
           <Stack>
@@ -318,7 +330,7 @@ const TimePanel = (props) => {
                 onClick={() => act('endNow')}
                 style={{ lineHeight: '1.8em' }}
               >
-                End Now
+                {t('End Now')}
               </Button>
             </Stack.Item>
             <Stack.Item>
@@ -328,7 +340,7 @@ const TimePanel = (props) => {
                 onClick={() => act('cancel')}
                 style={{ lineHeight: '1.8em' }}
               >
-                Cancel
+                {t('Cancel')}
               </Button>
             </Stack.Item>
           </Stack>
