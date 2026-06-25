@@ -11,13 +11,14 @@
 | Componente | Status | Arquivo |
 |---|---|---|
 | Sistema i18n DM (servidor) | Completo | `code/modules/i18n/i18n.dm` |
+| Preferência de idioma do jogador | Completo | `code/modules/client/preferences/ui_locale.dm` |
 | Integração TGUI payload | Completo | `code/modules/tgui/tgui.dm` (campo `locale` no config) |
 | Sistema i18n TGUI (React) | Completo | `tgui/packages/tgui/i18n/` |
 | Loader de locale TGUI | Completo | `tgui/packages/tgui/i18n/loader.ts` |
 | Hook useTranslation | Completo | `tgui/packages/tgui/i18n/useTranslation.ts` |
 | Tipo Config atualizado | Completo | `tgui/packages/tgui/events/types.ts` |
 | Handler update integrado | Completo | `tgui/packages/tgui/events/handlers/update.ts` |
-| Include no .dme | Completo | `tgstation.dme` |
+| Include no .dme | Completo | `tgstation.dme` (i18n + ui_locale) |
 
 ## Arquivos de Tradução (JSON)
 
@@ -34,6 +35,7 @@
 | Arquivo | Status | Notas |
 |---|---|---|
 | `code/modules/escape_menu/home_page.dm` | Completo | 7 botões principais + recursos |
+| `tgui/packages/tgui/interfaces/AlertModal.tsx` | Completo | Botões + título via `useTranslation()`; envia string original no `act()` |
 
 ## Decisões de Design
 
@@ -44,17 +46,19 @@
 ### Padrões adotados
 - Chave de tradução = string original em inglês
 - Fallback automático para inglês quando tradução não existe
-- Locale padrão do servidor: `pt-br`
+- Locale padrão do servidor: `pt-br` (jogador pode trocar para `en` nas Preferências do Jogo)
 - Jobs mantêm `#define` original (chaves de DB), tradução é apenas display
 - DM usa `T(key, locale)` e `client_T(client, key)`
 - TGUI usa `t(key)` e hook `useTranslation()`
+- **Importante (TGUI):** ao traduzir botões/ações, exibir `t(valor)` mas enviar o **valor original** em inglês no `act()` — o servidor compara contra a string original. Ver `AlertModal.tsx` como referência.
+- A preferência `ui_locale` aplica via `apply_to_client()`: seta `client.i18n_locale`, chama `load_translations()` e faz `send_full_update()` nas TGUIs abertas
 
 ## Próximos Passos
 
 ### Fase 2 — Tradução de UI (prioridade)
-- [ ] AlertModal.tsx — traduzir botões via `useTranslation()`
+- [x] AlertModal.tsx — traduzir botões via `useTranslation()`
 - [ ] Interfaces TGUI mais usadas (PreferencesMenu, VotePanel, etc.)
-- [ ] `code/modules/tgui_input/` — inputs e alertas do servidor
+- [ ] `code/modules/tgui_input/` — inputs e alertas do servidor (input_list, input_text, etc.)
 - [ ] Balloon alerts — aplicar `T()` nos mais comuns
 - [ ] Job display names — aplicar nos contextos de display
 

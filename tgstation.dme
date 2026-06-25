@@ -4139,6 +4139,7 @@
 #include "code\modules\client\preferences\time.dm"
 #include "code\modules\client\preferences\tooltips.dm"
 #include "code\modules\client\preferences\trans_prosthetic.dm"
+#include "code\modules\client\preferences\ui_locale.dm"
 #include "code\modules\client\preferences\ui_style.dm"
 #include "code\modules\client\preferences\underwear_color.dm"
 #include "code\modules\client\preferences\uplink_location.dm"
