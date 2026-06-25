@@ -1,5 +1,5 @@
-import { localeAtom, translationsAtom } from './index';
 import { store } from '../events/store';
+import { localeAtom, translationsAtom } from './index';
 
 export async function loadLocale(locale: string) {
   store.set(localeAtom, locale);

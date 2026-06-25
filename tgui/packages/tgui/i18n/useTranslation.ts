@@ -2,10 +2,7 @@ import { useAtomValue } from 'jotai';
 
 import { localeAtom, translationsAtom } from './index';
 
-function applyParams(
-  str: string,
-  params?: Record<string, string>,
-): string {
+function applyParams(str: string, params?: Record<string, string>): string {
   if (!params) return str;
   return str.replace(/\{(\w+)\}/g, (_, k) => params[k] ?? `{${k}}`);
 }

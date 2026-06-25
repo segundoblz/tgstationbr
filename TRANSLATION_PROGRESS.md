@@ -28,14 +28,20 @@
 | `strings/translations/pt-br/balloon.json` | ~47 | Completo (balloon alerts comuns) |
 | `strings/translations/pt-br/jobs_display.json` | ~43 | Completo (jobs principais) |
 | `strings/translations/pt-br/chat.json` | ~13 | Parcial (mensagens básicas) |
-| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~80 | Completo (strings base frontend) |
+| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~102 | Completo (strings base + inputs) |
 
-## Arquivos Traduzidos (Prova de Conceito)
+## Arquivos Traduzidos
 
 | Arquivo | Status | Notas |
 |---|---|---|
 | `code/modules/escape_menu/home_page.dm` | Completo | 7 botões principais + recursos |
 | `tgui/packages/tgui/interfaces/AlertModal.tsx` | Completo | Botões + título via `useTranslation()`; envia string original no `act()` |
+| `tgui/packages/tgui/interfaces/common/InputButtons.tsx` | Completo | Submit/Cancel — **compartilhado** por todos os modais de input |
+| `tgui/packages/tgui/interfaces/TextInputModal.tsx` | Completo | placeholder + título |
+| `tgui/packages/tgui/interfaces/NumberInputModal.tsx` | Completo | tooltips Min/Max/Reset (interpolados) + título |
+| `tgui/packages/tgui/interfaces/KeyComboModal.tsx` | Completo | "Awaiting input..." + título |
+| `tgui/packages/tgui/interfaces/CheckboxInput.tsx` | Completo | Min/Max + busca + título |
+| `tgui/packages/tgui/interfaces/ListInputWindow/` | Completo | placeholder + tooltips de modo + título |
 
 ## Decisões de Design
 
@@ -57,10 +63,12 @@
 
 ### Fase 2 — Tradução de UI (prioridade)
 - [x] AlertModal.tsx — traduzir botões via `useTranslation()`
-- [ ] Interfaces TGUI mais usadas (PreferencesMenu, VotePanel, etc.)
-- [ ] `code/modules/tgui_input/` — inputs e alertas do servidor (input_list, input_text, etc.)
+- [x] `tgui_input` (frontend) — todos os modais: text, number, keycombo, checkbox, list + InputButtons compartilhado
+- [ ] Interfaces TGUI mais usadas (PreferencesMenu, VotePanel, Vending, etc.)
 - [ ] Balloon alerts — aplicar `T()` nos mais comuns
 - [ ] Job display names — aplicar nos contextos de display
+
+> **Nota sobre `tgui_input` (DM):** os títulos default (`"Select"`, `"Text Input"`, `"Number Input"`, `"Key Input"`) vêm dos procs em `code/modules/tgui_input/*.dm`, mas são traduzidos no **frontend** via `t(title)` — sem modificar o DM, mantendo merge-friendly. As chaves correspondentes estão em `pt-br.json`.
 
 ### Fase 3 — Gameplay
 - [ ] Nomes e descrições de itens
