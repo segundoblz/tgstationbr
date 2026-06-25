@@ -8,10 +8,12 @@ import {
 import { formatMoney } from 'tgui-core/format';
 
 import { useBackend } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import type { CargoData } from './types';
 
 export function CargoStatus(props) {
   const { act, data } = useBackend<CargoData>();
+  const { t } = useTranslation();
   const {
     department,
     grocery,
@@ -46,7 +48,7 @@ export function CargoStatus(props) {
               color={grocery ? 'orange' : 'green'}
               tooltip={
                 grocery
-                  ? 'The kitchen is waiting for their grocery supply delivery!'
+                  ? t('The kitchen is waiting for their grocery supply delivery!')
                   : ''
               }
               tooltipPosition="right"
@@ -58,15 +60,15 @@ export function CargoStatus(props) {
             String(location)
           )}
         </LabeledList.Item>
-        <LabeledList.Item label="CentCom Message">{message}</LabeledList.Item>
+        <LabeledList.Item label={t('CentCom Message')}>{message}</LabeledList.Item>
         {!!loan && !requestonly && (
-          <LabeledList.Item label="Loan">
+          <LabeledList.Item label={t('Loan')}>
             {!loan_dispatched ? (
               <Button disabled={!(away && docked)} onClick={() => act('loan')}>
-                Loan Shuttle
+                {t('Loan Shuttle')}
               </Button>
             ) : (
-              <Box color="bad">Loaned to Centcom</Box>
+              <Box color="bad">{t('Loaned to Centcom')}</Box>
             )}
           </LabeledList.Item>
         )}

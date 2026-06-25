@@ -2,6 +2,7 @@ import { Button, Section, Stack, Tabs } from 'tgui-core/components';
 import { toTitleCase } from 'tgui-core/string';
 
 import { useBackend, useSharedState } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import { Window } from '../../layouts';
 import { CargoCartButtons } from './CargoButtons';
 import { CargoCart } from './CargoCart';
@@ -30,6 +31,7 @@ export function Cargo(props) {
 
 export function CargoContent(props) {
   const { act, data } = useBackend<CargoData>();
+  const { t } = useTranslation();
   const { cart = [], requests = [], requestonly } = data;
   const [tab, setTab] = useSharedState('cargotab', TAB.Catalog);
 
@@ -45,7 +47,7 @@ export function CargoContent(props) {
       </Stack.Item>
       <Stack.Item>
         <Section
-          title={toTitleCase(tab || '')}
+          title={t(toTitleCase(tab || ''))}
           buttons={
             <>
               {tab === TAB.Requests && !requestonly && (
@@ -54,7 +56,7 @@ export function CargoContent(props) {
                   color="transparent"
                   onClick={() => act('denyall')}
                 >
-                  Clear
+                  {t('Clear')}
                 </Button>
               )}
               {(tab === TAB.Catalog || tab === TAB.Cart) && (
@@ -69,7 +71,7 @@ export function CargoContent(props) {
               selected={tab === TAB.Catalog}
               onClick={() => setTab(TAB.Catalog)}
             >
-              Catalog
+              {t('Catalog')}
             </Tabs.Tab>
             <Tabs.Tab
               icon="envelope"
@@ -79,7 +81,7 @@ export function CargoContent(props) {
               selected={tab === TAB.Requests}
               onClick={() => setTab(TAB.Requests)}
             >
-              Requests ({requests.length})
+              {t('Requests ({count})', { count: String(requests.length) })}
             </Tabs.Tab>
             {!requestonly && (
               <>
@@ -89,14 +91,14 @@ export function CargoContent(props) {
                   selected={tab === TAB.Cart}
                   onClick={() => setTab(TAB.Cart)}
                 >
-                  Checkout ({amount})
+                  {t('Checkout ({amount})', { amount: String(amount) })}
                 </Tabs.Tab>
                 <Tabs.Tab
                   icon="question"
                   selected={tab === TAB.Help}
                   onClick={() => setTab(TAB.Help)}
                 >
-                  Help
+                  {t('Help')}
                 </Tabs.Tab>
               </>
             )}

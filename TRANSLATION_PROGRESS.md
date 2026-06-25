@@ -3,7 +3,7 @@
 ## Status Geral
 
 - **Fase atual:** Fase 2 (Tradução de UI) em andamento
-- **Strings traduzidas:** ~165 (UI base + interfaces VotePanel/Vending)
+- **Strings traduzidas:** ~220 (UI base + VotePanel/Vending/Cargo)
 - **Total estimado:** ~10.000-15.000 strings
 
 ## Infraestrutura
@@ -28,7 +28,7 @@
 | `strings/translations/pt-br/balloon.json` | ~47 | Completo (balloon alerts comuns) |
 | `strings/translations/pt-br/jobs_display.json` | ~43 | Completo (jobs principais) |
 | `strings/translations/pt-br/chat.json` | ~13 | Parcial (mensagens básicas) |
-| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~144 | Completo (base + inputs + votação + vending) |
+| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~198 | Completo (base + inputs + votação + vending + cargo) |
 
 ## Arquivos Traduzidos
 
@@ -44,6 +44,7 @@
 | `tgui/packages/tgui/interfaces/ListInputWindow/` | Completo | placeholder + tooltips de modo + título |
 | `tgui/packages/tgui/interfaces/VotePanel.tsx` | Completo | Painel de votação — títulos, botões, avisos, contadores (interpolados) |
 | `tgui/packages/tgui/interfaces/Vending.tsx` | Completo | Vendomatos — título, busca, preço (GRÁTIS), estoque, categorias via `t(name)` |
+| `tgui/packages/tgui/interfaces/Cargo/` | Completo | Console de cargo (7 arquivos) — abas, status, carrinho, pedidos, catálogo e ajuda completa |
 
 ## Decisões de Design
 
@@ -68,7 +69,8 @@
 - [x] `tgui_input` (frontend) — todos os modais: text, number, keycombo, checkbox, list + InputButtons compartilhado
 - [x] VotePanel.tsx — painel de votação (alta visibilidade, todos os jogadores)
 - [x] Vending.tsx — vendomatos (uso constante na rodada)
-- [ ] Próximas interfaces TGUI: PreferencesMenu, Crafting, NtOS/PDA, Cargo
+- [x] Cargo/ — console de cargo completo (catálogo, carrinho, pedidos, status, ajuda)
+- [ ] Próximas interfaces TGUI: PreferencesMenu, Crafting, NtOS/PDA
 - [ ] Balloon alerts — aplicar `T()` nos mais comuns
 - [ ] Job display names — aplicar nos contextos de display
 
@@ -77,6 +79,8 @@
 > **Colisão de chave resolvida (`Vote`):** "Vote" (botão) → "Votar"; o rótulo por opção usa a chave distinta `"{name} Vote"` → "Votação de {name}", evitando conflito de tradução para a mesma palavra.
 
 > **Nota sobre `tgui_input` (DM):** os títulos default (`"Select"`, `"Text Input"`, `"Number Input"`, `"Key Input"`) vêm dos procs em `code/modules/tgui_input/*.dm`, mas são traduzidos no **frontend** via `t(title)` — sem modificar o DM, mantendo merge-friendly. As chaves correspondentes estão em `pt-br.json`.
+
+> **Nota sobre `Cargo/`:** todos os 7 arquivos do diretório usam `useTranslation()`. O título da aba (`Section`) é traduzido via `t(toTitleCase(tab))` (chaves `Catalog`/`Active Requests`/`Cart`/`Help`). Termos SS13 mantidos em inglês dentro de frases traduzidas: **shuttle, cargo, CentCom, PDA, MULE/MULEbot, QM, disposals**. O texto longo de ajuda (`CargoHelp.tsx`) teve as constantes `ORDER_TEXT`/`DISPOSAL_TEXT` normalizadas para uma única linha (HTML colapsa espaços) e é traduzido via `t(CONST)`; os passos numerados mantêm as **referências literais de menu** (`Delivery Bot Control`, `Scan for Active Bots`, etc.) em inglês, pois apontam para apps ainda não traduzidos.
 
 ### Fase 3 — Gameplay
 - [ ] Nomes e descrições de itens

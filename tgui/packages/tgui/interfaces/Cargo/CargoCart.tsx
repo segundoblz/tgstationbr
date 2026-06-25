@@ -11,10 +11,12 @@ import {
 import { formatMoney } from 'tgui-core/format';
 
 import { useBackend } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import type { CargoData } from './types';
 
 export function CargoCart(props) {
   const { act, data } = useBackend<CargoData>();
+  const { t } = useTranslation();
   const { can_send, away, cart = [], docked, location } = data;
 
   const sendable = !!away && !!docked;
@@ -42,9 +44,13 @@ export function CargoCart(props) {
                   onClick={() => act('send')}
                   px={2}
                   py={1}
-                  tooltip={sendable ? '' : `Shuttle is at ${location}`}
+                  tooltip={
+                    sendable
+                      ? ''
+                      : t('Shuttle is at {location}', { location: String(location) })
+                  }
                 >
-                  Confirm the order
+                  {t('Confirm the order')}
                 </Button>
               </Stack.Item>
             </Stack>
@@ -57,23 +63,24 @@ export function CargoCart(props) {
 
 function CheckoutItems(props) {
   const { act, data } = useBackend<CargoData>();
+  const { t } = useTranslation();
   const { can_send, cart = [], max_order } = data;
 
   const [isValid, setIsValid] = useState(true);
 
   if (cart.length === 0) {
-    return <NoticeBox>Nothing in cart</NoticeBox>;
+    return <NoticeBox>{t('Nothing in cart')}</NoticeBox>;
   }
 
   return (
     <Table>
       <Table.Row header color="gray">
         <Table.Cell collapsing>ID</Table.Cell>
-        <Table.Cell>Supply Type</Table.Cell>
-        <Table.Cell>Amount</Table.Cell>
+        <Table.Cell>{t('Supply Type')}</Table.Cell>
+        <Table.Cell>{t('Amount')}</Table.Cell>
         <Table.Cell collapsing />
         <Table.Cell collapsing textAlign="right">
-          Cost
+          {t('Cost')}
         </Table.Cell>
       </Table.Row>
 
@@ -119,8 +126,14 @@ function CheckoutItems(props) {
           </Table.Cell>
 
           <Table.Cell collapsing color="average">
-            {!!entry.paid && <b>[Private x {entry.amount}]</b>}
-            {!!entry.dep_order && <b>[Department x {entry.amount}]</b>}
+            {!!entry.paid && (
+              <b>{t('[Private x {amount}]', { amount: String(entry.amount) })}</b>
+            )}
+            {!!entry.dep_order && (
+              <b>
+                {t('[Department x {amount}]', { amount: String(entry.amount) })}
+              </b>
+            )}
           </Table.Cell>
 
           <Table.Cell collapsing color="gold" textAlign="right">

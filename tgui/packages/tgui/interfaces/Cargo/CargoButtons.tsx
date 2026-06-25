@@ -2,10 +2,12 @@ import { Box, Button } from 'tgui-core/components';
 import { formatMoney } from 'tgui-core/format';
 
 import { useBackend } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import type { CargoData } from './types';
 
 export function CargoCartButtons(props) {
   const { act, data } = useBackend<CargoData>();
+  const { t } = useTranslation();
   const { cart = [], requestonly, can_send, can_approve_requests, displayed_currency_name } = data;
 
   let total = 0;
@@ -21,9 +23,9 @@ export function CargoCartButtons(props) {
   return (
     <>
       <Box inline mx={1}>
-        {amount === 0 && 'Cart is empty'}
-        {amount === 1 && '1 item'}
-        {amount >= 2 && `${amount} items`}{' '}
+        {amount === 0 && t('Cart is empty')}
+        {amount === 1 && t('1 item')}
+        {amount >= 2 && t('{amount} items', { amount: String(amount) })}{' '}
         {total > 0 && `(${formatMoney(total)}${displayed_currency_name})`}
       </Box>
 
@@ -33,7 +35,7 @@ export function CargoCartButtons(props) {
         color="transparent"
         onClick={() => act('clear')}
       >
-        Clear
+        {t('Clear')}
       </Button>
     </>
   );
