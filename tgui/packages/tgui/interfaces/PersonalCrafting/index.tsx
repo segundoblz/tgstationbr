@@ -16,6 +16,7 @@ import {
 import { createSearch } from 'tgui-core/string';
 
 import { useBackend } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import { Window } from '../../layouts';
 import { CATEGORY_ICONS_COOKING, CATEGORY_ICONS_CRAFTING } from './constants';
 import { FoodtypeContent } from './content/FoodtypeContent';
@@ -33,6 +34,7 @@ import {
 
 export function PersonalCrafting(props: any) {
   const { act, data } = useBackend<CraftingData>();
+  const { t } = useTranslation();
   const {
     mode,
     busy,
@@ -206,9 +208,13 @@ export function PersonalCrafting(props: any) {
                     autoFocus
                     expensive
                     placeholder={
-                      'Search in ' +
-                      data.recipes.length +
-                      (mode === MODE.cooking ? ' recipes...' : ' designs...')
+                      mode === MODE.cooking
+                        ? t('Search in {count} recipes...', {
+                            count: String(data.recipes.length),
+                          })
+                        : t('Search in {count} designs...', {
+                            count: String(data.recipes.length),
+                          })
                     }
                     value={searchText}
                     onChange={(value) => {
@@ -235,7 +241,7 @@ export function PersonalCrafting(props: any) {
                         );
                       }}
                     >
-                      Category
+                      {t('Category')}
                     </Tabs.Tab>
                     {mode === MODE.cooking && (
                       <Tabs.Tab
@@ -253,7 +259,7 @@ export function PersonalCrafting(props: any) {
                           );
                         }}
                       >
-                        Type
+                        {t('Type')}
                       </Tabs.Tab>
                     )}
                     <Tabs.Tab
@@ -267,7 +273,7 @@ export function PersonalCrafting(props: any) {
                         setMaterial(material_occurences[0].atom_id);
                       }}
                     >
-                      {mode === MODE.cooking ? 'Ingredient' : 'Material'}
+                      {mode === MODE.cooking ? t('Ingredient') : t('Material')}
                     </Tabs.Tab>
                   </Tabs>
                 </Stack.Item>
@@ -375,7 +381,7 @@ export function PersonalCrafting(props: any) {
                                         : 'default'
                                     }
                                   >
-                                    {category}
+                                    {t(category)}
                                   </Stack.Item>
                                   {category === 'Can Make' && (
                                     <Stack.Item>
@@ -390,7 +396,7 @@ export function PersonalCrafting(props: any) {
                                   <Stack.Item fontSize="0.95em">
                                     <Stack vertical pb={1}>
                                       <Stack.Item>
-                                        <SubGroupTitle title="Cuisines" />
+                                        <SubGroupTitle title={t('Cuisines')} />
                                       </Stack.Item>
                                       {allFoodCuisines.map((cuisine) => (
                                         <Stack.Item key={cuisine}>
@@ -415,12 +421,12 @@ export function PersonalCrafting(props: any) {
                                               mr={1}
                                               ml={0.5}
                                             />
-                                            {cuisine}
+                                            {t(cuisine)}
                                           </Button.Checkbox>
                                         </Stack.Item>
                                       ))}
                                       <Stack.Item>
-                                        <SubGroupTitle title="Dishes" />
+                                        <SubGroupTitle title={t('Dishes')} />
                                       </Stack.Item>
                                       {allDishCategories.map((dish) => (
                                         <Stack.Item key={dish}>
@@ -444,12 +450,12 @@ export function PersonalCrafting(props: any) {
                                               mr={1}
                                               ml={0.5}
                                             />
-                                            {dish}
+                                            {t(dish)}
                                           </Button.Checkbox>
                                         </Stack.Item>
                                       ))}
                                       <Stack.Item>
-                                        <SubGroupTitle title="Meals" />
+                                        <SubGroupTitle title={t('Meals')} />
                                       </Stack.Item>
                                       {allMealCategories.map((meal) => (
                                         <Stack.Item key={meal}>
@@ -473,7 +479,7 @@ export function PersonalCrafting(props: any) {
                                               mr={1}
                                               ml={0.5}
                                             />
-                                            {meal}
+                                            {t(meal)}
                                           </Button.Checkbox>
                                         </Stack.Item>
                                       ))}
@@ -495,14 +501,14 @@ export function PersonalCrafting(props: any) {
                       act('toggle_recipes');
                     }}
                   >
-                    Can make only
+                    {t('Can make only')}
                   </Button.Checkbox>
                   <Button.Checkbox
                     fluid
                     checked={display_compact}
                     onClick={() => act('toggle_compact')}
                   >
-                    Compact list
+                    {t('Compact list')}
                   </Button.Checkbox>
                 </Stack.Item>
                 {!forced_mode && (
@@ -528,7 +534,7 @@ export function PersonalCrafting(props: any) {
                             act('toggle_mode');
                           }}
                         >
-                          Craft
+                          {t('Craft')}
                         </Button.Checkbox>
                       </Stack.Item>
                       <Stack.Item grow>
@@ -551,7 +557,7 @@ export function PersonalCrafting(props: any) {
                             act('toggle_mode');
                           }}
                         >
-                          Cook
+                          {t('Cook')}
                         </Button.Checkbox>
                       </Stack.Item>
                     </Stack>
@@ -601,7 +607,7 @@ export function PersonalCrafting(props: any) {
                 </VirtualList>
               ) : (
                 <NoticeBox m={1} p={1}>
-                  No recipes found.
+                  {t('No recipes found.')}
                 </NoticeBox>
               )}
               {recipes.length > displayLimit && (
@@ -611,8 +617,11 @@ export function PersonalCrafting(props: any) {
                   style={{ cursor: 'pointer' }}
                   onClick={() => setPages(pages + 1)}
                 >
-                  Load {Math.min(pageSize, recipes.length - displayLimit)}{' '}
-                  more...
+                  {t('Load {count} more...', {
+                    count: String(
+                      Math.min(pageSize, recipes.length - displayLimit),
+                    ),
+                  })}
                 </Section>
               )}
             </Box>

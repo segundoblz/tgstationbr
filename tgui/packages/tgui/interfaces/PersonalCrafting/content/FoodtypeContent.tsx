@@ -1,3 +1,4 @@
+import { useTranslation } from 'tgui/i18n/useTranslation';
 import { Icon, Stack } from 'tgui-core/components';
 
 import { TYPE_ICONS } from '../constants';
@@ -11,6 +12,7 @@ type Props = {
 
 export function FoodtypeContent(props: Props) {
   const { type, diet, craftableCount } = props;
+  const { t } = useTranslation();
   let iconName = '',
     iconColor = '';
 
@@ -34,7 +36,7 @@ export function FoodtypeContent(props: Props) {
         <Icon name={TYPE_ICONS[type] || 'circle'} />
       </Stack.Item>
       <Stack.Item grow style={{ textTransform: 'capitalize' }}>
-        {type.toLowerCase()}
+        {type === 'Can Make' ? t('Can Make') : type.toLowerCase()}
       </Stack.Item>
       <Stack.Item>
         {type === 'Can Make'
