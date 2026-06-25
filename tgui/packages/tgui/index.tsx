@@ -14,6 +14,7 @@ import { setupHotReloading } from 'tgui-dev-server/link/client';
 import { App } from './App';
 import { setDebugHotKeys } from './debug/use-debug';
 import { bus } from './events/listeners';
+import { loadLocale } from './i18n/loader';
 import { render } from './renderer';
 import { createStackAugmentor } from './stack';
 
@@ -35,6 +36,8 @@ function setupApp() {
   captureExternalLinks();
 
   Byond.subscribe((type, payload) => bus.dispatch({ type, payload }));
+
+  loadLocale('pt-br');
 
   render(<App />);
 

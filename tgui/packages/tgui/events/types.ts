@@ -31,6 +31,7 @@ type User = {
 export type Config = {
   client: Client;
   interface: IFace;
+  locale: string;
   refreshing: BinaryIO;
   status: number;
   title: string;

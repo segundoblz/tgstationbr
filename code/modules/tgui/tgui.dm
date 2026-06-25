@@ -281,6 +281,7 @@
 			"address" = user.client.address,
 			"computer_id" = user.client.computer_id,
 		),
+		"locale" = user.client.i18n_locale || "pt-br",
 		"user" = list(
 			"name" = "[user]",
 			"observer" = isobserver(user),

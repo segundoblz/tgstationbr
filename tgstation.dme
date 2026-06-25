@@ -4723,6 +4723,7 @@
 #include "code\modules\hydroponics\grown\weeds\kudzu.dm"
 #include "code\modules\hydroponics\grown\weeds\nettle.dm"
 #include "code\modules\hydroponics\grown\weeds\starthistle.dm"
+#include "code\modules\i18n\i18n.dm"
 #include "code\modules\instruments\items.dm"
 #include "code\modules\instruments\piano_synth.dm"
 #include "code\modules\instruments\stationary.dm"

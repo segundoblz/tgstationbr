@@ -1,5 +1,6 @@
 import { perf } from 'common/perf';
 import { setupDrag } from '../../drag';
+import { loadLocale } from '../../i18n/loader';
 import { logger } from '../../logging';
 import { resumeRenderer } from '../../renderer';
 import {
@@ -64,6 +65,9 @@ function updateData(payload: UpdatePayload): void {
       ...prev,
       ...payload.config,
     }));
+    if (payload.config.locale) {
+      loadLocale(payload.config.locale as string);
+    }
   }
 
   if (payload.static_data) {
