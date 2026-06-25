@@ -1,6 +1,7 @@
 import { Button, ColorBox, Section, Stack, Table } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 import type { NTOSData } from '../layouts/NtosWindow';
 
@@ -12,6 +13,7 @@ export enum alert_relevancies {
 
 export const NtosMain = (props) => {
   const { act, data } = useBackend<NTOSData>();
+  const { t } = useTranslation();
   const {
     alert_style,
     alert_color,
@@ -34,8 +36,8 @@ export const NtosMain = (props) => {
   return (
     <NtosWindow
       title={
-        (PC_device_theme === 'syndicate' && 'Syndix Main Menu') ||
-        'NtOS Main Menu'
+        (PC_device_theme === 'syndicate' && t('Syndix Main Menu')) ||
+        t('NtOS Main Menu')
       }
       width={400}
       height={500}
@@ -78,7 +80,9 @@ export const NtosMain = (props) => {
                       ? '#0000000'
                       : alert_color
                   }
-                  tooltip="The current alert level. Indicator becomes more intense when there is a threat, moreso if your department is responsible for handling it."
+                  tooltip={t(
+                    'The current alert level. Indicator becomes more intense when there is a threat, moreso if your department is responsible for handling it.',
+                  )}
                 >
                   {alert_name}
                 </Button>
@@ -100,7 +104,7 @@ export const NtosMain = (props) => {
           </Section>
         )}
         <Section
-          title="Details"
+          title={t('Details')}
           buttons={
             <>
               {!!has_light && (
@@ -118,14 +122,14 @@ export const NtosMain = (props) => {
               )}
               <Button
                 icon="eject"
-                content="Eject ID"
+                content={t('Eject ID')}
                 disabled={!proposed_login.IDInserted}
                 onClick={() => act('PC_Eject_Disk', { name: 'ID' })}
               />
               {!!show_imprint && (
                 <Button
                   icon="dna"
-                  content="Imprint ID"
+                  content={t('Imprint ID')}
                   disabled={
                     !proposed_login.IDName ||
                     (proposed_login.IDName === login.IDName &&
@@ -139,7 +143,7 @@ export const NtosMain = (props) => {
         >
           <Table>
             <Table.Row>
-              ID Name:{' '}
+              {t('ID Name:')}{' '}
               {show_imprint
                 ? login.IDName +
                   ' ' +
@@ -147,7 +151,7 @@ export const NtosMain = (props) => {
                 : (proposed_login.IDName ?? '')}
             </Table.Row>
             <Table.Row>
-              Assignment:{' '}
+              {t('Assignment:')}{' '}
               {show_imprint
                 ? login.IDJob +
                   ' ' +
@@ -165,7 +169,7 @@ export const NtosMain = (props) => {
                     fluid
                     icon="eject"
                     color="transparent"
-                    content="Eject pAI"
+                    content={t('Eject pAI')}
                     onClick={() =>
                       act('PC_Pai_Interact', {
                         option: 'eject',
@@ -180,7 +184,7 @@ export const NtosMain = (props) => {
                     fluid
                     icon="cat"
                     color="transparent"
-                    content="Configure pAI"
+                    content={t('Configure pAI')}
                     onClick={() =>
                       act('PC_Pai_Interact', {
                         option: 'interact',
@@ -200,6 +204,7 @@ export const NtosMain = (props) => {
 
 const ProgramsTable = (props) => {
   const { act, data } = useBackend<NTOSData>();
+  const { t } = useTranslation();
   const { programs = [] } = data;
   // add the program filename to this list to have it excluded from the main menu program list table
   const filtered_programs = programs.filter(
@@ -207,7 +212,7 @@ const ProgramsTable = (props) => {
   );
 
   return (
-    <Section title="Programs">
+    <Section title={t('Programs')}>
       <Table>
         {filtered_programs.map((program) => (
           <Table.Row key={program.name}>
@@ -229,7 +234,7 @@ const ProgramsTable = (props) => {
                 <Button
                   color="transparent"
                   icon="times"
-                  tooltip="Close program"
+                  tooltip={t('Close program')}
                   tooltipPosition="left"
                   onClick={() =>
                     act('PC_killprogram', {
