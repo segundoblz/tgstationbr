@@ -3,7 +3,7 @@
 ## Status Geral
 
 - **Fase atual:** Fase 2 (Tradução de UI) em andamento
-- **Strings traduzidas:** ~345 (UI base + VotePanel/Vending/Cargo/Crafting + PDA/Messenger)
+- **Strings traduzidas:** ~365 (UI base + VotePanel/Vending/Cargo/Crafting + PDA/Messenger + PreferencesMenu)
 - **Total estimado:** ~10.000-15.000 strings
 
 ## Infraestrutura
@@ -28,7 +28,7 @@
 | `strings/translations/pt-br/balloon.json` | ~47 | Completo (balloon alerts comuns) |
 | `strings/translations/pt-br/jobs_display.json` | ~43 | Completo (jobs principais) |
 | `strings/translations/pt-br/chat.json` | ~13 | Parcial (mensagens básicas) |
-| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~321 | Completo (base + inputs + votação + vending + cargo + crafting + PDA/messenger) |
+| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~343 | Completo (base + inputs + votação + vending + cargo + crafting + PDA/messenger + preferências) |
 
 ## Arquivos Traduzidos
 
@@ -49,6 +49,7 @@
 | `tgui/packages/tgui/interfaces/PersonalCrafting/` | Completo | Menu de fabricação/culinária (index + 2 de content) — abas, filtros, categorias, botões, seções de receita e ajuda |
 | `tgui/packages/tgui/interfaces/NtosMain.tsx` | Completo | Tela inicial do PDA/NtOS — menu principal, detalhes da ID, seção pAI, lista de programas |
 | `tgui/packages/tgui/interfaces/NtosMessenger/` | Completo | App de mensagens do PDA (index + ChatScreen) — contatos, busca, conversas, anexos, "enviar para todos", dimmers |
+| `tgui/packages/tgui/interfaces/PreferencesMenu/` | Parcial | Navegação/chrome — abas de personagem/jogo, perfis, controles do editor, busca, categorias de prefs de jogo, popup de exclusão e nomes alternativos. **Rótulos individuais de cada preferência (`feature.name`) ficam em inglês (lote futuro).** |
 
 ## Decisões de Design
 
@@ -77,7 +78,8 @@
 - [x] StackCrafting.tsx — construção a partir de pilhas de material
 - [x] PersonalCrafting/ — menu de fabricação e culinária (alta visibilidade)
 - [x] NtOS/PDA — tela inicial (`NtosMain`) + app de mensagens (`NtosMessenger`)
-- [ ] PreferencesMenu — menu de preferências de personagem/jogo (alta visibilidade)
+- [x] PreferencesMenu — navegação/chrome (abas, perfis, editor de personagem, busca, categorias de prefs)
+- [ ] PreferencesMenu — rótulos individuais de cada preferência (`feature.name`/descrições) e antagonistas
 - [ ] Demais apps NtOS (Notepad, NetDownloader, Records, etc.)
 - [ ] Balloon alerts — aplicar `T()` nos mais comuns
 - [ ] Job display names — aplicar nos contextos de display
@@ -93,6 +95,8 @@
 > **Nota sobre `StackCrafting`/`PersonalCrafting`:** traduzida apenas a **interface fixa** — abas (`Category`/`Type`/`Ingredient`/`Material`), botões (`Make`→Fazer, `Craft`→Fabricar, `Cook`→Cozinhar), checkboxes, seções de receita (`Ingredients`/`Materials`/`Catalysts`/`Tools`/`Machinery`/`Structures`/`Steps`) e mensagens. **Nomes de receitas, itens, ingredientes e ferramentas vêm do servidor e ficam em inglês (Fase 3).** As **categorias** (left-nav e filtros de culinária) são exibidas via `t(category)` — as chaves correspondem exatamente aos `#define CAT_*`/`CUISINE_*`/`DISH_*`/`MEAL_*` em `code/__DEFINES/crafting.dm`; a comparação lógica (`activeCategory === 'Foods'`, cores, ícones) continua usando a string **original em inglês**, então traduzir só o display é seguro. Mantidos em inglês: **`Blood Cult`** (termo de antag), cozinhas de espécie/lore (**Lizard, Martian, Mothic**) e nomes idênticos em PT (Pizza, Sushi, Taco, Burrito, Tribal). Pluralização de "sheet"/"sheets" feita com duas chaves (`{count} sheet`/`{count} sheets`).
 
 > **Nota sobre `NtosMain`/`NtosMessenger` (PDA):** traduzida a **interface fixa** do PDA — menu principal, seção "Details", lista de "Programs", e todo o app SpaceMessenger (contatos, busca, conversa, anexos, dimmers de erro). **Nomes/descrições de apps (`app.desc`, `program.desc`), nível de alerta (`alert_name`), nomes e cargos vêm do servidor e ficam em inglês (Fase 3).** Mantidos em inglês: marcas/versões (**SpaceMessenger V6.5.x**, **NtOS**, **Syndix**), siglas (**PDA, ID, pAI, NT**). `ChatScreen.tsx` é um **componente de classe** (React `Component`), então usa a função autônoma `import { t } from '../../i18n'` em vez do hook `useTranslation()` — `t()` lê o locale do `store` em tempo de render e o full update do servidor já re-renderiza a árvore ao trocar de idioma. Pluralização de "unread message(s)" feita com duas chaves; botões alternados (`Ringer: On/Off`, `Send / Receive`, `Sort by: {mode}`, `Attach Virus: {state}`) usam chaves separadas ou interpolação.
+
+> **Nota sobre `PreferencesMenu/`:** traduzido o **chrome/navegação** (alta visibilidade — todo jogador passa por aqui): abas de Personagem (`Character`, `Occupations`, `Antagonists`, `Quirks and Personality`) e de Jogo (`Settings`, `Keybindings`), perfis de personagem (`New Character`), controles do editor (tooltips `Rotate`/`Species`/`Gender`/`Delete Character`), busca de aparência (`Select {name}`), popup de exclusão (`DeleteCharacterPopup`) e nomes alternativos (`names.tsx`). **As categorias de preferências de jogo (`feature.category`) são exibidas via `t(category)` no `TabbedMenu`** — só os rótulos de exibição (botão de aba e título da `Section`); as chaves de `categoryRefs`/`key` continuam usando a string **original em inglês** (igual ao padrão de Vending). Categorias traduzidas: `ACCESSIBILITY`→ACESSIBILIDADE, `GAMEPLAY`→JOGABILIDADE, `SOUND`→SOM, `TOOLTIPS`→DICAS; mantidas em inglês (fallback automático, sem chave): `ADMIN`, `CHAT`, `GHOST`, `RUNECHAT`, `UI`. **Os rótulos individuais de cada preferência (`feature.name`) e descrições — definidos nos arquivos TS de `preferences/features/*` — ainda ficam em inglês**, assim como `Loadout` e `Quirks` (termos de jogo). O `title` em `PreferencesMenu/index.tsx` é código morto (não renderizado), então não foi tocado.
 
 ### Fase 3 — Gameplay
 - [ ] Nomes e descrições de itens

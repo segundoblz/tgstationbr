@@ -1,4 +1,5 @@
 import { type ComponentProps, type ReactNode, useRef } from 'react';
+import { useTranslation } from 'tgui/i18n/useTranslation';
 import { Button, type Flex, Input, Section, Stack } from 'tgui-core/components';
 
 type TabbedMenuProps = {
@@ -9,6 +10,7 @@ type TabbedMenuProps = {
 };
 
 export function TabbedMenu(props: TabbedMenuProps) {
+  const { t } = useTranslation();
   const sectionRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -37,7 +39,7 @@ export function TabbedMenu(props: TabbedMenuProps) {
                   currentSection.scrollTop = offsetTop;
                 }}
               >
-                {category}
+                {t(category)}
               </Button>
             </Stack.Item>
           ))}
@@ -49,7 +51,7 @@ export function TabbedMenu(props: TabbedMenuProps) {
             fluid
             height="2em"
             fontSize="1.2em"
-            placeholder="Search..."
+            placeholder={t('Search...')}
             value={props.searchText}
             onChange={props.setSearchText}
           />
@@ -73,7 +75,7 @@ export function TabbedMenu(props: TabbedMenuProps) {
                   categoryRefs.current[category] = ref;
                 }}
               >
-                <Section fill title={category}>
+                <Section fill title={t(category)}>
                   {children}
                 </Section>
               </div>

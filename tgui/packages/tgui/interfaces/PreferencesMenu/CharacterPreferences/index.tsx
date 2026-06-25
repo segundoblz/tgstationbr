@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useBackend } from 'tgui/backend';
+import { useTranslation } from 'tgui/i18n/useTranslation';
 import { Button, Stack } from 'tgui-core/components';
 import { exhaustiveCheck } from 'tgui-core/exhaustive';
 
@@ -29,6 +30,7 @@ type ProfileProps = {
 
 function CharacterProfiles(props: ProfileProps) {
   const { activeSlot, onClick, profiles } = props;
+  const { t } = useTranslation();
 
   return (
     <Stack justify="center" wrap>
@@ -41,7 +43,7 @@ function CharacterProfiles(props: ProfileProps) {
             }}
             fluid
           >
-            {profile ?? 'New Character'}
+            {profile ?? t('New Character')}
           </Button>
         </Stack.Item>
       ))}
@@ -51,6 +53,7 @@ function CharacterProfiles(props: ProfileProps) {
 
 export function CharacterPreferenceWindow(props) {
   const { act, data } = useBackend<PreferencesMenuData>();
+  const { t } = useTranslation();
 
   const [currentPage, setCurrentPage] = useState(Page.Main);
 
@@ -102,7 +105,7 @@ export function CharacterPreferenceWindow(props) {
       </Stack.Item>
       {!data.content_unlocked && (
         <Stack.Item align="center">
-          Buy BYOND premium for more slots!
+          {t('Buy BYOND premium for more slots!')}
         </Stack.Item>
       )}
       <Stack.Divider />
@@ -115,7 +118,7 @@ export function CharacterPreferenceWindow(props) {
               setPage={setCurrentPage}
               otherActivePages={[Page.Species]}
             >
-              Character
+              {t('Character')}
             </PageButton>
           </Stack.Item>
 
@@ -125,7 +128,7 @@ export function CharacterPreferenceWindow(props) {
               page={Page.Loadout}
               setPage={setCurrentPage}
             >
-              Loadout
+              {t('Loadout')}
             </PageButton>
           </Stack.Item>
 
@@ -139,7 +142,7 @@ export function CharacterPreferenceWindow(props) {
                     Fun fact: This isn't "Jobs" so that it intentionally
                     catches your eyes, because it's really important!
                   */}
-              Occupations
+              {t('Occupations')}
             </PageButton>
           </Stack.Item>
 
@@ -149,7 +152,7 @@ export function CharacterPreferenceWindow(props) {
               page={Page.Antags}
               setPage={setCurrentPage}
             >
-              Antagonists
+              {t('Antagonists')}
             </PageButton>
           </Stack.Item>
 
@@ -159,7 +162,7 @@ export function CharacterPreferenceWindow(props) {
               page={Page.Quirks}
               setPage={setCurrentPage}
             >
-              Quirks and Personality
+              {t('Quirks and Personality')}
             </PageButton>
           </Stack.Item>
         </Stack>

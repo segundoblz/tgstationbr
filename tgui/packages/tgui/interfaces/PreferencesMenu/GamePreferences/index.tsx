@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'tgui/i18n/useTranslation';
 import { Stack } from 'tgui-core/components';
 import { exhaustiveCheck } from 'tgui-core/exhaustive';
 
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export function GamePreferenceWindow(props: Props) {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(
     props.startingPage ?? GamePreferencesSelectedPage.Settings,
   );
@@ -39,7 +41,7 @@ export function GamePreferenceWindow(props: Props) {
               page={GamePreferencesSelectedPage.Settings}
               setPage={setCurrentPage}
             >
-              Settings
+              {t('Settings')}
             </PageButton>
           </Stack.Item>
 
@@ -49,7 +51,7 @@ export function GamePreferenceWindow(props: Props) {
               page={GamePreferencesSelectedPage.Keybindings}
               setPage={setCurrentPage}
             >
-              Keybindings
+              {t('Keybindings')}
             </PageButton>
           </Stack.Item>
         </Stack>

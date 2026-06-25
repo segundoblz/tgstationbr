@@ -3,6 +3,7 @@ import { filter, map } from 'es-toolkit/compat';
 import { type ReactNode, useState } from 'react';
 import { useBackend } from 'tgui/backend';
 import { sendAct } from 'tgui/events/act';
+import { useTranslation } from 'tgui/i18n/useTranslation';
 import {
   Box,
   Button,
@@ -51,6 +52,7 @@ type CharacterControlsProps = {
 };
 
 function CharacterControls(props: CharacterControlsProps) {
+  const { t } = useTranslation();
   return (
     <Stack>
       <Stack.Item>
@@ -58,7 +60,7 @@ function CharacterControls(props: CharacterControlsProps) {
           onClick={props.handleRotate}
           fontSize="22px"
           icon="undo"
-          tooltip="Rotate"
+          tooltip={t('Rotate')}
           tooltipPosition="top"
         />
       </Stack.Item>
@@ -68,7 +70,7 @@ function CharacterControls(props: CharacterControlsProps) {
           onClick={props.handleOpenSpecies}
           fontSize="22px"
           icon="paw"
-          tooltip="Species"
+          tooltip={t('Species')}
           tooltipPosition="top"
         />
       </Stack.Item>
@@ -88,7 +90,7 @@ function CharacterControls(props: CharacterControlsProps) {
           fontSize="22px"
           icon="trash"
           color="red"
-          tooltip="Delete Character"
+          tooltip={t('Delete Character')}
           tooltipPosition="top"
           disabled={!props.canDeleteCharacter}
         />
@@ -108,10 +110,11 @@ type ChoicedSelectionProps = {
 
 function ChoicedSelection(props: ChoicedSelectionProps) {
   const { catalog, supplementalFeature, supplementalValue } = props;
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState('');
 
   if (!catalog.icons) {
-    return <Box color="red">Provided catalog had no icons!</Box>;
+    return <Box color="red">{t('Provided catalog had no icons!')}</Box>;
   }
 
   return (
@@ -128,7 +131,7 @@ function ChoicedSelection(props: ChoicedSelectionProps) {
         <Stack.Item>
           <Section
             fill
-            title={`Select ${props.name.toLowerCase()}`}
+            title={t('Select {name}', { name: props.name.toLowerCase() })}
             buttons={
               supplementalFeature && (
                 <FeatureValueInput
@@ -143,7 +146,7 @@ function ChoicedSelection(props: ChoicedSelectionProps) {
             <Input
               autoFocus
               fluid
-              placeholder="Search..."
+              placeholder={t('Search...')}
               onChange={setSearchText}
             />
           </Section>
@@ -207,6 +210,7 @@ type GenderButtonProps = {
 };
 
 function GenderButton(props: GenderButtonProps) {
+  const { t } = useTranslation();
   return (
     <Floating
       placement="right"
@@ -237,7 +241,7 @@ function GenderButton(props: GenderButtonProps) {
         <Button
           fontSize="22px"
           icon={GENDERS[props.gender].icon}
-          tooltip="Gender"
+          tooltip={t('Gender')}
           tooltipPosition="top"
         />
       </div>
@@ -357,6 +361,7 @@ type PreferenceListProps = {
 
 export function PreferenceList(props: PreferenceListProps) {
   const { act } = useBackend<PreferencesMenuData>();
+  const { t } = useTranslation();
   const { preferences, randomizations, maxHeight, children } = props;
 
   return (
@@ -380,7 +385,7 @@ export function PreferenceList(props: PreferenceListProps) {
             if (feature === undefined) {
               return (
                 <Stack.Item key={featureId}>
-                  <b>Feature {featureId} is not recognized.</b>
+                  <b>{t('Feature {featureId} is not recognized.', { featureId })}</b>
                 </Stack.Item>
               );
             }
