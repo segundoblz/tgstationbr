@@ -111,3 +111,7 @@ import { useTranslation } from 'tgui/i18n/useTranslation';
 const { t } = useTranslation();
 <Button>{t('Settings')}</Button>
 ```
+
+## Referências
+
+- **Documentação do código (Doxygen):** https://codedocs.tgstation13.org/ — referência de datums, procs e interfaces do TGStation; útil para localizar o que traduzir e entender a estrutura do código.
