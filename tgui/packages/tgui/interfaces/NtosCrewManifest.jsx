@@ -2,20 +2,22 @@ import { map } from 'es-toolkit/compat';
 import { Button, Section, Table } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 export const NtosCrewManifest = (props) => {
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   const { manifest = {} } = data;
   return (
     <NtosWindow width={400} height={480}>
       <NtosWindow.Content scrollable>
         <Section
-          title="Crew Manifest"
+          title={t('Crew Manifest')}
           buttons={
             <Button
               icon="print"
-              content="Print"
+              content={t('Print')}
               onClick={() => act('PRG_print')}
             />
           }

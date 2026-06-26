@@ -3,10 +3,12 @@ import { Box, Icon, Input, Section } from 'tgui-core/components';
 import { createSearch } from 'tgui-core/string';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 export const NtosRecords = (props) => {
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const { mode, records } = data;
 
@@ -16,11 +18,11 @@ export const NtosRecords = (props) => {
     <NtosWindow width={600} height={800}>
       <NtosWindow.Content scrollable>
         <Section textAlign="center">
-          NANOTRASEN PERSONNEL RECORDS (CLASSIFIED)
+          {t('NANOTRASEN PERSONNEL RECORDS (CLASSIFIED)')}
         </Section>
         <Section>
           <Input
-            placeholder="Filter results..."
+            placeholder={t('Filter results...')}
             value={searchTerm}
             fluid
             textAlign="center"
@@ -56,18 +58,18 @@ export const NtosRecords = (props) => {
                 {record.name}
               </Box>
               <br />
-              Rank: {record.rank}
+              {t('Rank')}: {record.rank}
               <br />
-              Species: {record.species}
+              {t('Species')}: {record.species}
               <br />
-              Gender: {record.gender}
+              {t('Gender')}: {record.gender}
               <br />
-              Age: {record.age}
+              {t('Age')}: {record.age}
               <br />
-              Fingerprint Hash: {record.fingerprint}
+              {t('Fingerprint Hash')}: {record.fingerprint}
               <br />
               <br />
-              Criminal Status: {record.wanted || 'DELETED'}
+              {t('Criminal Status')}: {record.wanted || t('DELETED')}
             </Section>
           ))}
         {mode === 'medical' &&
@@ -94,16 +96,16 @@ export const NtosRecords = (props) => {
                 {record.name}
               </Box>
               <br />
-              Bloodtype: {record.bloodtype}
+              {t('Bloodtype')}: {record.bloodtype}
               <br />
-              Minor Disabilities: {record.mi_dis}
+              {t('Minor Disabilities')}: {record.mi_dis}
               <br />
-              Major Disabilities: {record.ma_dis}
+              {t('Major Disabilities')}: {record.ma_dis}
               <br />
               <br />
-              Notes: {record.notes}
+              {t('Notes')}: {record.notes}
               <br />
-              Notes Contd: {record.cnotes}
+              {t('Notes Contd')}: {record.cnotes}
             </Section>
           ))}
       </NtosWindow.Content>
