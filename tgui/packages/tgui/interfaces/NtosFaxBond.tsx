@@ -1,6 +1,7 @@
 import { Button, NoticeBox, Section, Stack, Table } from 'tgui-core/components';
 import type { BooleanLike } from 'tgui-core/react';
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 type FaxInfoList = {
@@ -26,19 +27,20 @@ export const NtosFaxBond = (props) => {
 
 export const NtosFaxBondContent = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { faxes_info = [] } = data;
   return (
     <>
       <NoticeBox>
-        Scan any fax to be notified when it receives a message.
+        {t('Scan any fax to be notified when it receives a message.')}
       </NoticeBox>
       {!!faxes_info.length && (
         <Section>
           <Table>
             <Table.Row header>
               <Table.Cell>ID</Table.Cell>
-              <Table.Cell>Name</Table.Cell>
-              <Table.Cell>Location</Table.Cell>
+              <Table.Cell>{t('Name')}</Table.Cell>
+              <Table.Cell>{t('Location')}</Table.Cell>
               <Table.Cell />
             </Table.Row>
             {faxes_info.map((fax) => (
@@ -60,15 +62,15 @@ export const NtosFaxBondContent = (props) => {
                       color={fax.muted ? 'red' : 'default'}
                       tooltip={
                         fax.muted
-                          ? 'Unmute Notifications'
-                          : 'Mute Notifications'
+                          ? t('Unmute Notifications')
+                          : t('Mute Notifications')
                       }
                       onClick={() => act('mute', { id: fax.id })}
                     />
                     <Button.Confirm
                       fluid
                       icon="link-slash"
-                      tooltip="Unsubscribe"
+                      tooltip={t('Unsubscribe')}
                       confirmContent=""
                       confirmIcon="link-slash"
                       onClick={() => act('unsubscribe', { id: fax.id })}
