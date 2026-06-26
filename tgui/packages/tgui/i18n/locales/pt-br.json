@@ -542,5 +542,19 @@
 	"Scanning...": "Escaneando...",
 	"Scan": "Escanear",
 	"No trackable signals found": "Nenhum sinal rastreável encontrado",
-	"Signal Lost": "Sinal Perdido"
+	"Signal Lost": "Sinal Perdido",
+	"Tap something (right-click) with your tablet to use the physical scanner.": "Toque em algo (botão direito) com seu tablet para usar o scanner físico.",
+	"LAST SAVED RESULT": "ÚLTIMO RESULTADO SALVO",
+	"Detected Supermatters": "Supermatters Detectados",
+	"Integrity:": "Integridade:",
+	"CURRENT SPEED: {speed} GQ/s": "VELOCIDADE ATUAL: {speed} GQ/s",
+	"Target": "Alvo",
+	"EXECUTE": "EXECUTAR",
+	"System Status": "Status do Sistema",
+	"Nonfunctional": "Não Funcional",
+	"Functional": "Funcional",
+	"Integrity": "Integridade",
+	"RECONSTRUCTION IN PROGRESS": "RECONSTRUÇÃO EM ANDAMENTO",
+	"Begin Reconstruction": "Iniciar Reconstrução",
+	"Laws": "Leis"
 }
