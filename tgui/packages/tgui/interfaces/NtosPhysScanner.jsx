@@ -1,11 +1,13 @@
 import { Box, Section } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 import { sanitizeText } from '../sanitize';
 
 export const NtosPhysScanner = (props) => {
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   const { last_record } = data;
   const textHtml = {
     __html: sanitizeText(last_record),
@@ -14,12 +16,13 @@ export const NtosPhysScanner = (props) => {
     <NtosWindow width={600} height={350}>
       <NtosWindow.Content scrollable>
         <Section>
-          Tap something (right-click) with your tablet to use the physical
-          scanner.
+          {t(
+            'Tap something (right-click) with your tablet to use the physical scanner.',
+          )}
         </Section>
         <Section>
           <Box bold>
-            LAST SAVED RESULT
+            {t('LAST SAVED RESULT')}
             <br />
             <br />
           </Box>

@@ -1,6 +1,7 @@
 import { Button, Flex, Input, Section } from 'tgui-core/components';
 
 import { useBackend, useSharedState } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 
 type Data = {
   upperText: string;
@@ -10,6 +11,7 @@ type Data = {
 
 export function StatusDisplayControls(props) {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const {
     upperText: initialUpper,
     lowerText: initialLower,
@@ -33,18 +35,18 @@ export function StatusDisplayControls(props) {
           color="bad"
           onClick={() => act('setStatusPicture', { picture: 'blank' })}
         >
-          Off
+          {t('Off')}
         </Button>
         <Button
           icon="space-shuttle"
           color=""
           onClick={() => act('setStatusPicture', { picture: 'shuttle' })}
         >
-          Shuttle ETA / Off
+          {t('Shuttle ETA / Off')}
         </Button>
       </Section>
 
-      <Section title="Graphics">
+      <Section title={t('Graphics')}>
         <Button
           icon="flag"
           onClick={() => act('setStatusPicture', { picture: 'default' })}
@@ -56,7 +58,7 @@ export function StatusDisplayControls(props) {
           icon="exclamation"
           onClick={() => act('setStatusPicture', { picture: 'currentalert' })}
         >
-          Security Alert Level
+          {t('Security Alert Level')}
         </Button>
 
         <Button
@@ -70,18 +72,18 @@ export function StatusDisplayControls(props) {
           icon="biohazard"
           onClick={() => act('setStatusPicture', { picture: 'biohazard' })}
         >
-          Biohazard
+          {t('Biohazard')}
         </Button>
 
         <Button
           icon="radiation"
           onClick={() => act('setStatusPicture', { picture: 'radiation' })}
         >
-          Radiation
+          {t('Radiation')}
         </Button>
       </Section>
 
-      <Section title="Message">
+      <Section title={t('Message')}>
         <Flex direction="column" align="stretch">
           <Flex.Item mb={1}>
             <Input
@@ -106,7 +108,7 @@ export function StatusDisplayControls(props) {
               icon="comment-o"
               onClick={() => act('setStatusMessage', { upperText, lowerText })}
             >
-              Send
+              {t('Send')}
             </Button>
           </Flex.Item>
         </Flex>

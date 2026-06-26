@@ -8,15 +8,17 @@ import {
 } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 export const NtosSkillTracker = (props) => {
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   const { skills = {} } = data;
   return (
     <NtosWindow width={500} height={600}>
       <NtosWindow.Content scrollable>
-        <Section title="Skill Tracker">
+        <Section title={t('Skill Tracker')}>
           {skills.map((skill, idx) => (
             <Section key={idx} level={2} title={skill.name}>
               <BlockQuote>{skill.desc}</BlockQuote>
@@ -24,10 +26,14 @@ export const NtosSkillTracker = (props) => {
                 <Table>
                   <Table.Row header>
                     <Table.Cell textAlign="center" collapsing>
-                      Level
+                      {t('Level')}
                     </Table.Cell>
-                    <Table.Cell textAlign="center">Level Progress</Table.Cell>
-                    <Table.Cell textAlign="center">Overall Progress</Table.Cell>
+                    <Table.Cell textAlign="center">
+                      {t('Level Progress')}
+                    </Table.Cell>
+                    <Table.Cell textAlign="center">
+                      {t('Overall Progress')}
+                    </Table.Cell>
                   </Table.Row>
                   <Table.Row className="candystripe">
                     <Table.Cell textAlign="center" collapsing>
@@ -78,7 +84,9 @@ export const NtosSkillTracker = (props) => {
                             act('PRG_reward', { skill: skill.name })
                           }
                         >
-                          Contact the Professional {skill.title} Association
+                          {t('Contact the Professional {title} Association', {
+                            title: skill.title,
+                          })}
                         </Button>
                       </Table.Cell>
                     </Table.Row>

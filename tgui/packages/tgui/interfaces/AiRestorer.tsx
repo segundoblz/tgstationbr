@@ -9,6 +9,7 @@ import {
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { Window } from '../layouts';
 
 type Data = {
@@ -34,6 +35,7 @@ export const AiRestorer = () => {
 
 export const AiRestorerContent = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const {
     AI_present,
     error,
@@ -59,15 +61,15 @@ export const AiRestorerContent = (props) => {
       )}
       {!!AI_present && (
         <Section
-          title={ejectable ? 'System Status' : name}
+          title={ejectable ? t('System Status') : name}
           buttons={
             <Box inline bold color={isDead ? 'bad' : 'good'}>
-              {isDead ? 'Nonfunctional' : 'Functional'}
+              {isDead ? t('Nonfunctional') : t('Functional')}
             </Box>
           }
         >
           <LabeledList>
-            <LabeledList.Item label="Integrity">
+            <LabeledList.Item label={t('Integrity')}>
               <ProgressBar
                 value={health}
                 minValue={0}
@@ -82,18 +84,18 @@ export const AiRestorerContent = (props) => {
           </LabeledList>
           {!!restoring && (
             <Box bold textAlign="center" fontSize="20px" color="good" mt={1}>
-              RECONSTRUCTION IN PROGRESS
+              {t('RECONSTRUCTION IN PROGRESS')}
             </Box>
           )}
           <Button
             fluid
             icon="plus"
-            content="Begin Reconstruction"
+            content={t('Begin Reconstruction')}
             disabled={restoring}
             mt={1}
             onClick={() => act('PRG_beginReconstruction')}
           />
-          <Section title="Laws">
+          <Section title={t('Laws')}>
             {laws.map((law) => (
               <Box key={law} className="candystripe">
                 {law}

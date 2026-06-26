@@ -2,6 +2,7 @@ import { Button, LabeledList, Section } from 'tgui-core/components';
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 type Data = {
@@ -10,6 +11,7 @@ type Data = {
 
 export const NtosRevelation = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { armed } = data;
 
   return (
@@ -18,7 +20,7 @@ export const NtosRevelation = (props) => {
         <Section>
           <Button.Input
             fluid
-            buttonText="Obfuscate Name..."
+            buttonText={t('Obfuscate Name...')}
             onCommit={(value) =>
               act('PRG_obfuscate', {
                 new_name: value,
@@ -28,10 +30,10 @@ export const NtosRevelation = (props) => {
           />
           <LabeledList>
             <LabeledList.Item
-              label="Payload Status"
+              label={t('Payload Status')}
               buttons={
                 <Button
-                  content={armed ? 'ARMED' : 'DISARMED'}
+                  content={armed ? t('ARMED') : t('DISARMED')}
                   color={armed ? 'bad' : 'average'}
                   onClick={() => act('PRG_arm')}
                 />
@@ -41,7 +43,7 @@ export const NtosRevelation = (props) => {
           <Button
             fluid
             bold
-            content="ACTIVATE"
+            content={t('ACTIVATE')}
             textAlign="center"
             color="bad"
             disabled={!armed}

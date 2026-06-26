@@ -4,6 +4,7 @@ import { classes } from 'tgui-core/react';
 import { createSearch } from 'tgui-core/string';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 type Data = {
@@ -16,6 +17,7 @@ type Emoji = {
 
 export const NtosEmojipedia = (props) => {
   const { data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { emoji_list = [] } = data;
   const [filter, setFilter] = useState('');
 
@@ -31,12 +33,12 @@ export const NtosEmojipedia = (props) => {
           buttons={
             <>
               <Input
-                placeholder="Search by name"
+                placeholder={t('Search by name')}
                 value={filter}
                 onChange={setFilter}
               />
               <Button
-                tooltip={'Click on an emoji to copy its tag!'}
+                tooltip={t('Click on an emoji to copy its tag!')}
                 tooltipPosition="bottom"
                 icon="circle-question"
               />

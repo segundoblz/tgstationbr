@@ -11,6 +11,7 @@ import {
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 import type { NTOSData } from '../layouts/NtosWindow';
 import { AccessList } from './common/AccessList';
@@ -67,6 +68,7 @@ export const NtosCard = (props) => {
 
 export const NtosCardContent = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const {
     authed_user,
     modified_card,
@@ -93,15 +95,14 @@ export const NtosCardContent = (props) => {
       {!!modified_card && !!authed_user && (
         <Stack.Item>
           <Section
-            title="Templates"
+            title={t('Templates')}
             mt={1}
             buttons={
               <Button
                 icon="question-circle"
-                tooltip={
-                  'Will attempt to apply all access for the template to the ID card.\n' +
-                  'Does not use wildcards unless the template specifies them.'
-                }
+                tooltip={t(
+                  'Will attempt to apply all access for the template to the ID card.\nDoes not use wildcards unless the template specifies them.',
+                )}
                 tooltipPosition="left"
               />
             }
@@ -109,7 +110,9 @@ export const NtosCardContent = (props) => {
             {modified_card.has_trim ? (
               <TemplateDropdown templates={templates} />
             ) : (
-              'Templates require a trim already applied to the card. Please use an ID Painter to apply a trim.'
+              t(
+                'Templates require a trim already applied to the card. Please use an ID Painter to apply a trim.',
+              )
             )}
           </Section>
         </Stack.Item>
@@ -129,8 +132,8 @@ export const NtosCardContent = (props) => {
                 showBasic={!!show_basic}
                 extraButtons={
                   <Button.Confirm
-                    content="Terminate Employment"
-                    confirmContent="Fire Employee?"
+                    content={t('Terminate Employment')}
+                    confirmContent={t('Fire Employee?')}
                     color="bad"
                     onClick={() => act('PRG_terminate')}
                   />
@@ -152,6 +155,7 @@ export const NtosCardContent = (props) => {
 
 const LoginPage = () => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { authed_user, auth_card, is_holding_id } = data;
 
   return (
@@ -161,7 +165,7 @@ const LoginPage = () => {
           <NoticeBox info={!!authed_user}>
             {authed_user
               ? `Login: ${authed_user}`
-              : 'Please log in to continue.'}
+              : t('Please log in to continue.')}
           </NoticeBox>
         </Stack.Item>
         <Stack.Item width="100%">
@@ -178,7 +182,7 @@ const LoginPage = () => {
               >
                 {auth_card
                   ? `${auth_card.id_owner} (${auth_card.id_rank})`
-                  : 'Insert ID'}
+                  : t('Insert ID')}
               </Button>
             </Flex.Item>
             <Flex.Item>
@@ -189,7 +193,7 @@ const LoginPage = () => {
                   act(authed_user ? 'PRG_logout' : 'PRG_authenticate');
                 }}
               >
-                {authed_user ? 'Log Out' : 'Log In'}
+                {authed_user ? t('Log Out') : t('Log In')}
               </Button>
             </Flex.Item>
           </Flex>
@@ -201,6 +205,7 @@ const LoginPage = () => {
 
 const IdCardPage = (props) => {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { authed_user, auth_card, modified_card, is_holding_id } = data;
 
   return (
@@ -220,7 +225,7 @@ const IdCardPage = (props) => {
               >
                 {modified_card
                   ? `${modified_card.id_owner} (${modified_card.id_rank})`
-                  : 'Insert ID'}
+                  : t('Insert ID')}
               </Button>
             </Flex.Item>
             <Flex.Item>
@@ -229,7 +234,7 @@ const IdCardPage = (props) => {
                 disabled={!modified_card || !authed_user}
                 onClick={() => act('PRG_print')}
               >
-                Print Report
+                {t('Print Report')}
               </Button>
             </Flex.Item>
           </Flex>
@@ -238,7 +243,7 @@ const IdCardPage = (props) => {
       {!!(modified_card && authed_user) && (
         <>
           <Stack mt={1}>
-            <Stack.Item align="center">Details:</Stack.Item>
+            <Stack.Item align="center">{t('Details:')}</Stack.Item>
             <Stack.Item grow={1} mr={1} ml={1}>
               <Input
                 width="100%"
@@ -254,7 +259,7 @@ const IdCardPage = (props) => {
               <NumberInput
                 step={1}
                 value={modified_card.id_age || 0}
-                unit="Years"
+                unit={t('Years')}
                 minValue={17}
                 maxValue={85}
                 onChange={(value) => {
@@ -266,7 +271,7 @@ const IdCardPage = (props) => {
             </Stack.Item>
           </Stack>
           <Stack>
-            <Stack.Item align="center">Assignment:</Stack.Item>
+            <Stack.Item align="center">{t('Assignment:')}</Stack.Item>
             <Stack.Item grow={1} ml={1}>
               <Input
                 fluid
@@ -288,6 +293,7 @@ const IdCardPage = (props) => {
 
 const TemplateDropdown = (props) => {
   const { act } = useBackend<Data>();
+  const { t } = useTranslation();
   const { templates } = props;
 
   const templateKeys = Object.keys(templates);
@@ -299,7 +305,7 @@ const TemplateDropdown = (props) => {
       <Stack.Item grow>
         <Dropdown
           width="100%"
-          placeholder="Select a template..."
+          placeholder={t('Select a template...')}
           options={templateKeys.map((path) => {
             return templates[path];
           })}
@@ -308,7 +314,7 @@ const TemplateDropdown = (props) => {
               name: sel,
             })
           }
-          selected="None"
+          selected={t('None')}
         />
       </Stack.Item>
     </Stack>

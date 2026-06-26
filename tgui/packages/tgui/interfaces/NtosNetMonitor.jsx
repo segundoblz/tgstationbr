@@ -10,6 +10,7 @@ import {
 } from 'tgui-core/components';
 
 import { useBackend, useSharedState } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 export const NtosNetMonitor = (props) => {
@@ -69,14 +70,16 @@ export const NtosNetMonitor = (props) => {
 const MainPage = (props) => {
   const { ntnetrelays, idsalarm, idsstatus, ntnetlogs = [] } = props;
   const { act, data } = useBackend();
+  const { t } = useTranslation();
 
   return (
     <Section>
       <NoticeBox>
-        WARNING: Disabling wireless transmitters when using a wireless device
-        may prevent you from reenabling them!
+        {t(
+          'WARNING: Disabling wireless transmitters when using a wireless device may prevent you from reenabling them!',
+        )}
       </NoticeBox>
-      <Section title="Wireless Connectivity">
+      <Section title={t('Wireless Connectivity')}>
         {ntnetrelays.map((relay) => (
           <Section
             key={relay.ref}
@@ -84,7 +87,7 @@ const MainPage = (props) => {
             buttons={
               <Button.Confirm
                 color={relay.is_operational ? 'good' : 'bad'}
-                content={relay.is_operational ? 'ENABLED' : 'DISABLED'}
+                content={relay.is_operational ? t('ENABLED') : t('DISABLED')}
                 onClick={() =>
                   act('toggle_relay', {
                     ref: relay.ref,
@@ -95,30 +98,31 @@ const MainPage = (props) => {
           />
         ))}
       </Section>
-      <Section title="Security Systems">
+      <Section title={t('Security Systems')}>
         {!!idsalarm && (
           <>
-            <NoticeBox>NETWORK INCURSION DETECTED</NoticeBox>
+            <NoticeBox>{t('NETWORK INCURSION DETECTED')}</NoticeBox>
             <Box italics>
-              Abnormal activity has been detected in the network. Check system
-              logs for more information
+              {t(
+                'Abnormal activity has been detected in the network. Check system logs for more information',
+              )}
             </Box>
           </>
         )}
         <LabeledList>
           <LabeledList.Item
-            label="IDS Status"
+            label={t('IDS Status')}
             buttons={
               <>
                 <Button
                   icon={idsstatus ? 'power-off' : 'times'}
-                  content={idsstatus ? 'ENABLED' : 'DISABLED'}
+                  content={idsstatus ? t('ENABLED') : t('DISABLED')}
                   selected={idsstatus}
                   onClick={() => act('toggleIDS')}
                 />
                 <Button
                   icon="sync"
-                  content="Reset"
+                  content={t('Reset')}
                   color="bad"
                   onClick={() => act('resetIDS')}
                 />
@@ -127,11 +131,11 @@ const MainPage = (props) => {
           />
         </LabeledList>
         <Section
-          title="System Log"
+          title={t('System Log')}
           buttons={
             <Button.Confirm
               icon="trash"
-              content="Clear Logs"
+              content={t('Clear Logs')}
               onClick={() => act('purgelogs')}
             />
           }
@@ -150,15 +154,16 @@ const MainPage = (props) => {
 const TabletPage = (props) => {
   const { tablets } = props;
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   if (!tablets.length) {
-    return <NoticeBox>No tablets detected.</NoticeBox>;
+    return <NoticeBox>{t('No tablets detected.')}</NoticeBox>;
   }
   return (
     <Section>
       <Stack vertical mt={1}>
         <Section fill textAlign="center">
           <Icon name="comment" mr={1} />
-          Active Tablets
+          {t('Active Tablets')}
         </Section>
       </Stack>
       <Stack vertical mt={1}>
@@ -174,8 +179,8 @@ const TabletPage = (props) => {
                     color={tablet.enabled_spam ? 'good' : 'default'}
                     content={
                       tablet.enabled_spam
-                        ? 'Restrict Mass PDA'
-                        : 'Allow Mass PDA'
+                        ? t('Restrict Mass PDA')
+                        : t('Allow Mass PDA')
                     }
                     onClick={() =>
                       act('toggle_mass_pda', {

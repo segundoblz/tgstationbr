@@ -13,6 +13,7 @@ import type { BooleanLike } from 'tgui-core/react';
 
 import { resolveAsset } from '../assets';
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 type Data = {
@@ -48,12 +49,13 @@ export function NtosArcade(props) {
 
 function PlayerStats(props) {
   const { data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { PauseState, PlayerHitpoints, PlayerMP, Status } = data;
 
   return (
     <>
       <LabeledList>
-        <LabeledList.Item label="Player Health">
+        <LabeledList.Item label={t('Player Health')}>
           <ProgressBar
             value={PlayerHitpoints}
             minValue={0}
@@ -68,7 +70,7 @@ function PlayerStats(props) {
             {PlayerHitpoints}HP
           </ProgressBar>
         </LabeledList.Item>
-        <LabeledList.Item label="Player Magic">
+        <LabeledList.Item label={t('Player Magic')}>
           <ProgressBar
             value={PlayerMP}
             minValue={0}
@@ -118,60 +120,61 @@ function BossBar(props) {
 
 function BottomButtons(props) {
   const { act, data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { GameActive, PauseState, TicketCount } = data;
 
   return (
     <>
       <Button
         icon="fist-raised"
-        tooltip="Go in for the kill!"
+        tooltip={t('Go in for the kill!')}
         tooltipPosition="top"
         disabled={!GameActive || !!PauseState}
         onClick={() => act('Attack')}
       >
-        Attack!
+        {t('Attack!')}
       </Button>
       <Button
         icon="band-aid"
-        tooltip="Heal yourself!"
+        tooltip={t('Heal yourself!')}
         tooltipPosition="top"
         disabled={!GameActive || !!PauseState}
         onClick={() => act('Heal')}
       >
-        Heal!
+        {t('Heal!')}
       </Button>
       <Button
         icon="magic"
-        tooltip="Recharge your magic!"
+        tooltip={t('Recharge your magic!')}
         tooltipPosition="top"
         disabled={!GameActive || !!PauseState}
         onClick={() => act('Recharge_Power')}
       >
-        Recharge!
+        {t('Recharge!')}
       </Button>
 
       <Box>
         <Button
           icon="sync-alt"
-          tooltip="One more game couldn't hurt."
+          tooltip={t("One more game couldn't hurt.")}
           tooltipPosition="top"
           disabled={!!GameActive}
           onClick={() => act('Start_Game')}
         >
-          Begin Game
+          {t('Begin Game')}
         </Button>
         <Button
           icon="ticket-alt"
-          tooltip="Claim at your local Arcade Computer for Prizes!"
+          tooltip={t('Claim at your local Arcade Computer for Prizes!')}
           tooltipPosition="top"
           disabled={!!GameActive}
           onClick={() => act('Dispense_Tickets')}
         >
-          Claim Tickets
+          {t('Claim Tickets')}
         </Button>
       </Box>
       <Box color={TicketCount >= 1 ? 'good' : 'normal'}>
-        Earned Tickets: {TicketCount}
+        {t('Earned Tickets: {count}', { count: String(TicketCount) })}
       </Box>
     </>
   );
