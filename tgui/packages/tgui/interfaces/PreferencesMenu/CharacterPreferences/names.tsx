@@ -1,6 +1,7 @@
 import { binaryInsertWith } from 'common/collections';
 import { sortBy } from 'es-toolkit';
 import { useState } from 'react';
+import { useTranslation } from 'tgui/i18n/useTranslation';
 import {
   Box,
   Button,
@@ -42,6 +43,7 @@ type MultiNameProps = {
 
 export function MultiNameInput(props: MultiNameProps) {
   const { handleUpdateName, handleRandomizeName } = props;
+  const { t } = useTranslation();
 
   const data = useServerPrefs();
   if (!data) return;
@@ -64,10 +66,10 @@ export function MultiNameInput(props: MultiNameProps) {
         <Section
           buttons={
             <Button color="red" onClick={props.handleClose}>
-              Close
+              {t('Close')}
             </Button>
           }
-          title="Alternate names"
+          title={t('Alternate names')}
         >
           <LabeledList>
             {sortNameWithKeyEntries(Object.entries(namesIntoGroups)).map(
@@ -88,7 +90,7 @@ export function MultiNameInput(props: MultiNameProps) {
                             <Stack.Item>
                               <Button
                                 icon="dice"
-                                tooltip="Randomize"
+                                tooltip={t('Randomize')}
                                 tooltipPosition="right"
                                 onClick={() => handleRandomizeName(key)}
                               />
@@ -117,6 +119,7 @@ type NameInputProps = {
 };
 
 export function NameInput(props: NameInputProps) {
+  const { t } = useTranslation();
   const [lastNameBeforeEdit, setLastNameBeforeEdit] = useState<string | null>(
     null,
   );
@@ -183,7 +186,7 @@ export function NameInput(props: NameInputProps) {
           <Stack.Item>
             <Button
               as="span"
-              tooltip="Alternate Names"
+              tooltip={t('Alternate Names')}
               tooltipPosition="bottom"
               style={{
                 background: 'rgba(0, 0, 0, 0.7)',

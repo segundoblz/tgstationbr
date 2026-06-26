@@ -2,6 +2,7 @@ import { binaryInsertWith } from 'common/collections';
 import { sortBy } from 'es-toolkit';
 import { type ReactNode, useState } from 'react';
 import { useBackend } from 'tgui/backend';
+import { useTranslation } from 'tgui/i18n/useTranslation';
 import { Box, Flex, Tooltip } from 'tgui-core/components';
 
 import { features } from '../preferences/features';
@@ -27,6 +28,7 @@ function sortByName(array: [string, PreferenceChild[]][]) {
 
 export function GamePreferencesPage(props) {
   const { data } = useBackend<PreferencesMenuData>();
+  const { t } = useTranslation();
 
   const gamePreferences: Record<string, PreferenceChild[]> = {};
 
@@ -77,7 +79,7 @@ export function GamePreferencesPage(props) {
             />
           ) : (
             <Box as="b" color="red">
-              ...is not filled out properly!!!
+              {t('...is not filled out properly!!!')}
             </Box>
           )}
         </Flex.Item>

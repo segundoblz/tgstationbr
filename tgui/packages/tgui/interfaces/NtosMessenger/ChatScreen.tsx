@@ -13,6 +13,7 @@ import {
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../../backend';
+import { t } from '../../i18n';
 import type { NtMessage, NtMessenger, NtPicture } from './types';
 
 type ChatScreenProps = {
@@ -212,7 +213,7 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
       sendingBar = (
         <Section fill>
           <Box width="100%" italic color="gray" ml={1}>
-            You cannot reply to this user.
+            {t('You cannot reply to this user.')}
           </Box>
         </Section>
       );
@@ -236,7 +237,7 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
         <Section fill>
           <Button
             icon="arrow-left"
-            content="Back"
+            content={t('Back')}
             onClick={() => this.setState({ selectingPhoto: false })}
           />
           {photos.length > 0 ? (
@@ -245,7 +246,7 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
             </Section>
           ) : (
             <Box as="span" ml={1}>
-              No photos found
+              {t('No photos found')}
             </Box>
           )}
         </Section>
@@ -253,13 +254,15 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
     } else {
       const attachmentButton = sendingVirus ? (
         <Button
-          tooltip="ERROR: File signature is unverified. Please contact an NT support intern."
+          tooltip={t(
+            'ERROR: File signature is unverified. Please contact an NT support intern.',
+          )}
           icon="triangle-exclamation"
           color="red"
         />
       ) : (
         <Button
-          tooltip="Add attachment"
+          tooltip={t('Add attachment')}
           icon="image"
           onClick={this.handleSelectPicture}
         />
@@ -270,7 +273,7 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
           <Stack.Item>{attachmentButton}</Stack.Item>
           <Stack.Item>
             <Button
-              tooltip="Send"
+              tooltip={t('Send')}
               icon="arrow-right"
               onClick={this.handleSendMessage}
               disabled={!canSend}
@@ -289,7 +292,7 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
                 <Button
                   pt={1}
                   onClick={() => act('PDA_clearPhoto')}
-                  tooltip="Remove attachment"
+                  tooltip={t('Remove attachment')}
                 >
                   <Image src={selectedPhoto} />
                 </Button>
@@ -299,7 +302,9 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
               <Stack fill align="center">
                 <Stack.Item grow>
                   <Input
-                    placeholder={`Send message to ${recipient.name}...`}
+                    placeholder={t('Send message to {name}...', {
+                      name: recipient.name,
+                    })}
                     fluid
                     autoFocus
                     value={message}
@@ -322,19 +327,19 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
         <Section>
           <Button
             icon="arrow-left"
-            content="Back"
+            content={t('Back')}
             onClick={() => act('PDA_viewMessages', { ref: null })}
           />
           {chatRef && (
             <>
               <Button
                 icon="box-archive"
-                content="Close chat"
+                content={t('Close chat')}
                 onClick={() => act('PDA_closeMessages', { ref: chatRef })}
               />
               <Button.Confirm
                 icon="trash-can"
-                content="Delete chat"
+                content={t('Delete chat')}
                 onClick={() => act('PDA_clearMessages', { ref: chatRef })}
               />
             </>
@@ -353,7 +358,9 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
               {!!(messages.length > 0 && canReply) && (
                 <>
                   <Stack.Item textAlign="center" fontSize={1}>
-                    This is the beginning of your chat with {recipient.name}.
+                    {t('This is the beginning of your chat with {name}.', {
+                      name: recipient.name,
+                    })}
                   </Stack.Item>
                   <Stack.Divider />
                 </>
@@ -368,11 +375,11 @@ export class ChatScreen extends Component<ChatScreenProps, ChatScreenState> {
         {previewingImage && (
           <Modal className="NtosChatLog__ImagePreview">
             <Section
-              title="Photo Preview"
+              title={t('Photo Preview')}
               buttons={
                 <Button
                   icon="arrow-left"
-                  content="Back"
+                  content={t('Back')}
                   tooltipPosition="left"
                   onClick={() => this.setState({ previewingImage: undefined })}
                 />
@@ -417,11 +424,13 @@ const ChatMessage = (props: ChatMessageProps) => {
         </Tooltip>
       </Box>
       {!!everyone && (
-        <Box className="NtosChatMessage__everyone">Sent to everyone</Box>
+        <Box className="NtosChatMessage__everyone">
+          {t('Sent to everyone')}
+        </Box>
       )}
       {!!photoPath && (
         <Button
-          tooltip="View image"
+          tooltip={t('View image')}
           className="NtosChatMessage__image"
           color="transparent"
           onClick={onPreviewImage}
@@ -437,7 +446,7 @@ const ChatDivider = (props: { mt: number }) => {
   return (
     <Box className="UnreadDivider" m={0} mt={props.mt}>
       <div />
-      <span>Unread Messages</span>
+      <span>{t('Unread Messages')}</span>
       <div />
     </Box>
   );

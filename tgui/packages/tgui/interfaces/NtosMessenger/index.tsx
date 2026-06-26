@@ -16,6 +16,7 @@ import type { BooleanLike } from 'tgui-core/react';
 import { createSearch } from 'tgui-core/string';
 
 import { useBackend } from '../../backend';
+import { useTranslation } from '../../i18n/useTranslation';
 import { NtosWindow } from '../../layouts';
 import { ChatScreen } from './ChatScreen';
 import type { NtChat, NtMessenger, NtPicture } from './types';
@@ -89,6 +90,7 @@ export const NtosMessenger = (props) => {
 
 const AccessDeniedScreen = (props: any) => {
   const { act, data } = useBackend<NtosMessengerData>();
+  const { t } = useTranslation();
 
   return (
     <Stack fill vertical>
@@ -109,13 +111,15 @@ const AccessDeniedScreen = (props: any) => {
         fontSize="30px"
         textAlign="center"
       >
-        ERROR: CONNECTION REFUSED
+        {t('ERROR: CONNECTION REFUSED')}
       </NoticeBox>
       <Stack vertical position="relative" top="35%" textAlign="left">
         <Section>
-          <Box>Message from host:</Box>
-          <Box>- Remote access of this application has been restricted.</Box>
-          <Box>- Contact your Administrator for further assistance.</Box>
+          <Box>{t('Message from host:')}</Box>
+          <Box>
+            {t('- Remote access of this application has been restricted.')}
+          </Box>
+          <Box>{t('- Contact your Administrator for further assistance.')}</Box>
         </Section>
       </Stack>
     </Stack>
@@ -124,6 +128,7 @@ const AccessDeniedScreen = (props: any) => {
 
 const ContactsScreen = (props: any) => {
   const { act, data } = useBackend<NtosMessengerData>();
+  const { t } = useTranslation();
   const {
     owner,
     alert_silenced,
@@ -204,7 +209,7 @@ const ContactsScreen = (props: any) => {
               SpaceMessenger V6.5.4
             </Box>
             <Box italic opacity={0.3} mt={1}>
-              Bringing you spy-proof communications since 2467.
+              {t('Bringing you spy-proof communications since 2467.')}
             </Box>
             <Divider hidden />
             <Box>
@@ -212,7 +217,9 @@ const ContactsScreen = (props: any) => {
                 icon="bell"
                 disabled={!alert_able}
                 content={
-                  alert_able && !alert_silenced ? 'Ringer: On' : 'Ringer: Off'
+                  alert_able && !alert_silenced
+                    ? t('Ringer: On')
+                    : t('Ringer: Off')
                 }
                 onClick={() => act('PDA_toggleAlerts')}
               />
@@ -220,26 +227,30 @@ const ContactsScreen = (props: any) => {
                 icon="address-card"
                 content={
                   sending_and_receiving
-                    ? 'Send / Receive: On'
-                    : 'Send / Receive: Off'
+                    ? t('Send / Receive: On')
+                    : t('Send / Receive: Off')
                 }
                 onClick={() => act('PDA_toggleSendingAndReceiving')}
               />
               <Button
                 icon="bell"
-                content="Set Ringtone"
+                content={t('Set Ringtone')}
                 onClick={() => act('PDA_ringSet')}
               />
               <Button
                 icon="sort"
-                content={`Sort by: ${sort_by_job ? 'Job' : 'Name'}`}
+                content={t('Sort by: {mode}', {
+                  mode: sort_by_job ? t('Job') : t('Name'),
+                })}
                 onClick={() => act('PDA_changeSortStyle')}
               />
               {!!virus_attach && (
                 <Button
                   icon="bug"
                   color="bad"
-                  content={`Attach Virus: ${sending_virus ? 'Yes' : 'No'}`}
+                  content={t('Attach Virus: {state}', {
+                    state: sending_virus ? t('Yes') : t('No'),
+                  })}
                   onClick={() => act('PDA_toggleVirus')}
                 />
               )}
@@ -249,11 +260,11 @@ const ContactsScreen = (props: any) => {
           <Stack justify="space-between">
             <Box m={0.5}>
               <Icon name="magnifying-glass" mr={1} />
-              Search For User
+              {t('Search For User')}
             </Box>
             <Input
               width="220px"
-              placeholder="Search by name or job..."
+              placeholder={t('Search by name or job...')}
               value={searchUser}
               onChange={setSearchUser}
             />
@@ -265,7 +276,7 @@ const ContactsScreen = (props: any) => {
           <Stack vertical fill>
             <Section>
               <Icon name="comments" mr={1} />
-              Previous Messages
+              {t('Previous Messages')}
             </Section>
             <Section fill scrollable>
               <Stack vertical>{filteredChatButtons}</Stack>
@@ -279,7 +290,7 @@ const ContactsScreen = (props: any) => {
             <Stack>
               <Box m={0.5}>
                 <Icon name="address-card" mr={1} />
-                Detected Messengers
+                {t('Detected Messengers')}
               </Box>
             </Stack>
           </Section>
@@ -289,7 +300,7 @@ const ContactsScreen = (props: any) => {
                 <Stack align="center" justify="center" fill pl={4}>
                   <Icon color="gray" name="user-slash" size={2} />
                   <Stack.Item fontSize={1.5} ml={3}>
-                    No users found.
+                    {t('No users found.')}
                   </Stack.Item>
                 </Stack>
               )}
@@ -316,8 +327,10 @@ type ChatButtonProps = {
 
 const ChatButton = (props: ChatButtonProps) => {
   const { act } = useBackend();
+  const { t } = useTranslation();
   const unreadMessages = props.unreads;
   const hasUnreads = unreadMessages > 0;
+  const unreadLabel = unreadMessages <= 9 ? String(unreadMessages) : '9+';
   return (
     <Button
       icon={hasUnreads && 'envelope'}
@@ -328,9 +341,9 @@ const ChatButton = (props: ChatButtonProps) => {
       }}
     >
       {hasUnreads &&
-        `[${unreadMessages <= 9 ? unreadMessages : '9+'} unread message${
-          unreadMessages !== 1 ? 's' : ''
-        }]`}{' '}
+        (unreadMessages === 1
+          ? t('[{count} unread message]', { count: unreadLabel })
+          : t('[{count} unread messages]', { count: unreadLabel }))}{' '}
       {props.name}
     </Button>
   );
@@ -338,6 +351,7 @@ const ChatButton = (props: ChatButtonProps) => {
 
 const SendToAllSection = (props) => {
   const { data, act } = useBackend<NtosMessengerData>();
+  const { t } = useTranslation();
   const { on_spam_cooldown } = data;
 
   const [message, setMessage] = useState('');
@@ -348,19 +362,21 @@ const SendToAllSection = (props) => {
         <Stack justify="space-between">
           <Stack.Item align="center">
             <Icon name="satellite-dish" mr={1} ml={0.5} />
-            Send To All
+            {t('Send To All')}
           </Stack.Item>
           <Stack.Item>
             <Button
               icon="arrow-right"
               disabled={on_spam_cooldown || message === ''}
-              tooltip={on_spam_cooldown && 'Wait before sending more messages!'}
+              tooltip={
+                on_spam_cooldown && t('Wait before sending more messages!')
+              }
               onClick={() => {
                 act('PDA_sendEveryone', { message: message });
                 setMessage('');
               }}
             >
-              Send
+              {t('Send')}
             </Button>
           </Stack.Item>
         </Stack>
@@ -370,7 +386,7 @@ const SendToAllSection = (props) => {
           height={6}
           width="100%"
           value={message}
-          placeholder="Send message to everyone..."
+          placeholder={t('Send message to everyone...')}
           onChange={setMessage}
           selfClear
           onEnter={() => {
@@ -383,6 +399,7 @@ const SendToAllSection = (props) => {
 };
 
 const NoIDDimmer = () => {
+  const { t } = useTranslation();
   return (
     <Dimmer>
       <Stack align="baseline" vertical>
@@ -390,7 +407,7 @@ const NoIDDimmer = () => {
           <Icon color="red" name="address-card" size={10} />
         </Stack>
         <Stack.Item fontSize="18px">
-          Please imprint an ID to continue.
+          {t('Please imprint an ID to continue.')}
         </Stack.Item>
       </Stack>
     </Dimmer>
