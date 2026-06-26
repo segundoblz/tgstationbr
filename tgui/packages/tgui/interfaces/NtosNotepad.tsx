@@ -8,6 +8,7 @@ import { useRef, useState } from 'react';
 import { Box, Dialog, Divider, MenuBar, Section } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 import type { NTOSData } from '../layouts/NtosWindow';
 import { createLogger } from '../logging';
@@ -72,6 +73,7 @@ const NtosNotepadMenuBar = (props: MenuBarProps) => {
     setWordWrap,
     aboutNotepadDialog,
   } = props;
+  const { t } = useTranslation();
   const [openOnHover, setOpenOnHover] = useState(false);
   const [openMenuBar, setOpenMenuBar] = useState<string | null>(null);
   const onMenuItemClick = (value) => {
@@ -131,55 +133,57 @@ const NtosNotepadMenuBar = (props: MenuBarProps) => {
       <MenuBar.Dropdown
         entry="file"
         openWidth="22rem"
-        display={<PartiallyUnderlined str="File" indexStart={0} />}
+        display={<PartiallyUnderlined str={t('File')} indexStart={0} />}
         {...itemProps}
       >
-        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('new', 'New')} />
-        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('save', 'Save')} />
+        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('new', t('New'))} />
+        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('save', t('Save'))} />
         <MenuBar.Dropdown.Separator key="firstSep" />
-        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('exit', 'Exit...')} />
+        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('exit', t('Exit...'))} />
       </MenuBar.Dropdown>
       <MenuBar.Dropdown
         entry="edit"
         openWidth="22rem"
-        display={<PartiallyUnderlined str="Edit" indexStart={0} />}
+        display={<PartiallyUnderlined str={t('Edit')} indexStart={0} />}
         {...itemProps}
       >
-        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('cut', 'Cut')} />
-        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('copy', 'Copy')} />
-        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('paste', 'Paste')} />
-        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('delete', 'Delete')} />
+        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('cut', t('Cut'))} />
+        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('copy', t('Copy'))} />
+        <MenuBar.Dropdown.MenuItem {...getMenuItemProps('paste', t('Paste'))} />
+        <MenuBar.Dropdown.MenuItem
+          {...getMenuItemProps('delete', t('Delete'))}
+        />
       </MenuBar.Dropdown>
       <MenuBar.Dropdown
         entry="format"
         openWidth="15rem"
-        display={<PartiallyUnderlined str="Format" indexStart={1} />}
+        display={<PartiallyUnderlined str={t('Format')} indexStart={1} />}
         {...itemProps}
       >
         <MenuBar.Dropdown.MenuItemToggle
           checked={wordWrap}
-          {...getMenuItemProps('wordWrap', 'Word Wrap')}
+          {...getMenuItemProps('wordWrap', t('Word Wrap'))}
         />
       </MenuBar.Dropdown>
       <MenuBar.Dropdown
         entry="view"
         openWidth="15rem"
-        display={<PartiallyUnderlined str="View" indexStart={0} />}
+        display={<PartiallyUnderlined str={t('View')} indexStart={0} />}
         {...itemProps}
       >
         <MenuBar.Dropdown.MenuItemToggle
           checked={showStatusBar}
-          {...getMenuItemProps('statusBar', 'Status Bar')}
+          {...getMenuItemProps('statusBar', t('Status Bar'))}
         />
       </MenuBar.Dropdown>
       <MenuBar.Dropdown
         entry="help"
         openWidth="17rem"
-        display={<PartiallyUnderlined str="Help" indexStart={0} />}
+        display={<PartiallyUnderlined str={t('Help')} indexStart={0} />}
         {...itemProps}
       >
         <MenuBar.Dropdown.MenuItem
-          {...getMenuItemProps('aboutNotepad', 'About Notepad')}
+          {...getMenuItemProps('aboutNotepad', t('About Notepad'))}
         />
       </MenuBar.Dropdown>
     </MenuBar>
@@ -192,13 +196,17 @@ interface StatusBarProps {
 
 const StatusBar = (props: StatusBarProps) => {
   const { statuses } = props;
+  const { t } = useTranslation();
   return (
     <Box className="NtosNotepad__StatusBar">
       <Box className="NtosNotepad__StatusBar__entry" minWidth="25rem">
-        Press shift-enter to insert new line
+        {t('Press shift-enter to insert new line')}
       </Box>
       <Box className="NtosNotepad__StatusBar__entry" minWidth="15rem">
-        Ln {statuses.line}, Col {statuses.column}
+        {t('Ln {line}, Col {column}', {
+          line: String(statuses.line),
+          column: String(statuses.column),
+        })}
       </Box>
       <Box className="NtosNotepad__StatusBar__entry" minWidth="5rem">
         100%
@@ -282,11 +290,12 @@ type AboutDialogProps = {
 const AboutDialog = (props: AboutDialogProps) => {
   const { close } = props;
   const { data } = useBackend<NTOSData>();
+  const { t } = useTranslation();
   const { show_imprint, login } = data;
   const paragraphStyle = { padding: '.5rem 1rem 0 2rem' };
 
   return (
-    <Dialog title="About Notepad" onClose={close} width={'500px'}>
+    <Dialog title={t('About Notepad')} onClose={close} width={'500px'}>
       <div className="Dialog__body">
         <span className="NtosNotepad__AboutDialog__logo">NtOS</span>
         <Divider />
@@ -296,12 +305,12 @@ const AboutDialog = (props: AboutDialogProps) => {
             Version 7815696ecbf1c96e6894b779456d330e
           </span>
           <span style={paragraphStyle}>
-            &copy; NT Corporation. All rights reserved.
+            &copy; NT Corporation. {t('All rights reserved.')}
           </span>
           <span style={{ padding: '3rem 1rem 3rem 2rem' }}>
-            The NtOS operating system and its user interface are protected by
-            trademark and other pending or existing intellectual property rights
-            in the Sol system and other regions.
+            {t(
+              'The NtOS operating system and its user interface are protected by trademark and other pending or existing intellectual property rights in the Sol system and other regions.',
+            )}
           </span>
           <span
             style={{
@@ -309,15 +318,15 @@ const AboutDialog = (props: AboutDialogProps) => {
               maxWidth: '35rem',
             }}
           >
-            This product is licensed under the NT Corporation Terms to:
+            {t('This product is licensed under the NT Corporation Terms to:')}
           </span>
           <span style={{ padding: '0 1rem 0 4rem' }}>
-            {show_imprint ? login.IDName : 'Unknown'}
+            {show_imprint ? login.IDName : t('Unknown')}
           </span>
         </Box>
       </div>
       <div className="Dialog__footer">
-        <Dialog.Button onClick={close}>Ok</Dialog.Button>
+        <Dialog.Button onClick={close}>{t('Ok')}</Dialog.Button>
       </div>
     </Dialog>
   );
@@ -330,6 +339,7 @@ type RetryActionType = (retrying?: boolean) => void;
 
 export const NtosNotepad = (props) => {
   const { act, data } = useBackend<NoteData>();
+  const { t } = useTranslation();
   const { note } = data;
   const [documentName, setDocumentName] = useState(DEFAULT_DOCUMENT_NAME);
   const [originalText, setOriginalText] = useState(note);
@@ -395,7 +405,7 @@ export const NtosNotepad = (props) => {
   const unsavedAsterisk = text !== originalText ? '*' : '';
   return (
     <NtosWindow
-      title={`${unsavedAsterisk}${documentName} - Notepad`}
+      title={`${unsavedAsterisk}${t(documentName)} - Notepad`}
       width={840}
       height={900}
     >
@@ -429,14 +439,18 @@ export const NtosNotepad = (props) => {
       {activeDialog === Dialogs.UNSAVED_CHANGES && (
         <Dialog title="Notepad" onClose={handleCloseDialog}>
           <div className="Dialog__body">
-            Do you want to save changes to {documentName}?
+            {t('Do you want to save changes to {name}?', {
+              name: t(documentName),
+            })}
           </div>
           <div className="Dialog__footer">
-            <Dialog.Button onClick={handleSave}>Save</Dialog.Button>
+            <Dialog.Button onClick={handleSave}>{t('Save')}</Dialog.Button>
             <Dialog.Button onClick={handleCloseDialog}>
-              Don&apos;t Save
+              {t("Don't Save")}
             </Dialog.Button>
-            <Dialog.Button onClick={handleCloseDialog}>Cancel</Dialog.Button>
+            <Dialog.Button onClick={handleCloseDialog}>
+              {t('Cancel')}
+            </Dialog.Button>
           </div>
         </Dialog>
       )}

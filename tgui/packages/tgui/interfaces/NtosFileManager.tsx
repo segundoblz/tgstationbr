@@ -13,6 +13,7 @@ import {
 import { clamp } from 'tgui-core/math';
 import type { BooleanLike } from 'tgui-core/react';
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 type FileEntry = {
@@ -56,6 +57,7 @@ type PrintDialogProps = {
 
 const PrintDialog = (props: PrintDialogProps) => {
   const { toPrint, printTypes, onConfirm, onCancel } = props;
+  const { t } = useTranslation();
   const { name, image_ref, image_width, image_height } = toPrint;
   const [printType, setPrintType] = useState<PrintType>(
     printTypes.toSorted(
@@ -83,7 +85,7 @@ const PrintDialog = (props: PrintDialogProps) => {
   return (
     <Dimmer>
       <Section
-        title="Print"
+        title={t('Print')}
         backgroundColor="primary"
         maxHeight="50%"
         maxWidth="90%"
@@ -91,7 +93,7 @@ const PrintDialog = (props: PrintDialogProps) => {
       >
         <Stack fill justify="space-between">
           <Stack.Item maxWidth="70%">
-            <Section title="Formats">
+            <Section title={t('Formats')}>
               <Stack vertical overflowY="scroll">
                 {printTypes.map((type, i) => {
                   const { displayText } = type;
@@ -156,7 +158,7 @@ const PrintDialog = (props: PrintDialogProps) => {
               </Stack.Item>
               <Stack.Item>
                 <LabeledList>
-                  <LabeledList.Item label="X Offset">
+                  <LabeledList.Item label={t('X Offset')}>
                     <Slider
                       tickWhileDragging
                       minValue={image_width > width ? -maxOffsetX : minOffsetX}
@@ -167,7 +169,7 @@ const PrintDialog = (props: PrintDialogProps) => {
                       }
                     />
                   </LabeledList.Item>
-                  <LabeledList.Item label="Y Offset">
+                  <LabeledList.Item label={t('Y Offset')}>
                     <Slider
                       tickWhileDragging
                       minValue={
@@ -192,11 +194,11 @@ const PrintDialog = (props: PrintDialogProps) => {
                         onConfirm(name, printType, offsetX, offsetY)
                       }
                     >
-                      Print
+                      {t('Print')}
                     </Button>
                   </Stack.Item>
                   <Stack.Item>
-                    <Button onClick={onCancel}>Cancel</Button>
+                    <Button onClick={onCancel}>{t('Cancel')}</Button>
                   </Stack.Item>
                 </Stack>
               </Stack.Item>
@@ -210,6 +212,7 @@ const PrintDialog = (props: PrintDialogProps) => {
 
 export const NtosFileManager = (props) => {
   const { act, data } = useBackend<NtosFileManagerData>();
+  const { t } = useTranslation();
   const { usbconnected, files = [], usbfiles = [], printTypes } = data;
   const [toPrint, setToPrint] = useState<FileEntry>();
   const [printingFromUsb, setPrintingFromUsb] = useState(false);
@@ -257,7 +260,7 @@ export const NtosFileManager = (props) => {
           />
         </Section>
         {usbconnected && (
-          <Section title="Data Disk">
+          <Section title={t('Data Disk')}>
             <FileTable
               usbmode
               files={usbfiles}
@@ -306,12 +309,13 @@ const FileTable = (props: FileTableProps) => {
     onToggleSilence,
     onPrint,
   } = props;
+  const { t } = useTranslation();
   return (
     <Table>
       <Table.Row header>
-        <Table.Cell>File</Table.Cell>
-        <Table.Cell collapsing>Type</Table.Cell>
-        <Table.Cell collapsing>Size</Table.Cell>
+        <Table.Cell>{t('File')}</Table.Cell>
+        <Table.Cell collapsing>{t('Type')}</Table.Cell>
+        <Table.Cell collapsing>{t('Size')}</Table.Cell>
       </Table.Row>
       {files.map((file) => (
         <Table.Row key={file.name} className="candystripe">
@@ -333,7 +337,9 @@ const FileTable = (props: FileTableProps) => {
               <Button
                 icon={file.alert_silenced ? 'bell-slash' : 'bell'}
                 color={file.alert_silenced ? 'red' : 'default'}
-                tooltip={file.alert_silenced ? 'Unmute Alerts' : 'Mute Alerts'}
+                tooltip={
+                  file.alert_silenced ? t('Unmute Alerts') : t('Mute Alerts')
+                }
                 onClick={() => onToggleSilence!(file.name)}
               />
             )}
@@ -343,20 +349,20 @@ const FileTable = (props: FileTableProps) => {
                   icon="trash"
                   confirmIcon="times"
                   confirmContent=""
-                  tooltip="Delete"
+                  tooltip={t('Delete')}
                   onClick={() => onDelete(file.name)}
                 />
                 {!!usbconnected &&
                   (usbmode ? (
                     <Button
                       icon="download"
-                      tooltip="Download"
+                      tooltip={t('Download')}
                       onClick={() => onUpload(file.name)}
                     />
                   ) : (
                     <Button
                       icon="upload"
-                      tooltip="Upload"
+                      tooltip={t('Upload')}
                       onClick={() => onUpload(file.name)}
                     />
                   ))}
@@ -365,7 +371,7 @@ const FileTable = (props: FileTableProps) => {
             {!!file.printable && (
               <Button
                 icon="print"
-                tooltip="Print"
+                tooltip={t('Print')}
                 onClick={() => onPrint(file)}
               />
             )}
