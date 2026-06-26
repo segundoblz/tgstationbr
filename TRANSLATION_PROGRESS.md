@@ -3,7 +3,7 @@
 ## Status Geral
 
 - **Fase atual:** Fase 2 (Tradução de UI) em andamento
-- **Strings traduzidas:** ~365 (UI base + VotePanel/Vending/Cargo/Crafting + PDA/Messenger + PreferencesMenu)
+- **Strings traduzidas:** ~410 (UI base + VotePanel/Vending/Cargo/Crafting + PDA/Messenger + PreferencesMenu + apps NtOS Notepad/NetDownloader/FileManager)
 - **Total estimado:** ~10.000-15.000 strings
 
 ## Infraestrutura
@@ -28,7 +28,7 @@
 | `strings/translations/pt-br/balloon.json` | ~47 | Completo (balloon alerts comuns) |
 | `strings/translations/pt-br/jobs_display.json` | ~43 | Completo (jobs principais) |
 | `strings/translations/pt-br/chat.json` | ~13 | Parcial (mensagens básicas) |
-| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~343 | Completo (base + inputs + votação + vending + cargo + crafting + PDA/messenger + preferências) |
+| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~390 | Completo (base + inputs + votação + vending + cargo + crafting + PDA/messenger + preferências + apps NtOS) |
 
 ## Arquivos Traduzidos
 
@@ -50,6 +50,9 @@
 | `tgui/packages/tgui/interfaces/NtosMain.tsx` | Completo | Tela inicial do PDA/NtOS — menu principal, detalhes da ID, seção pAI, lista de programas |
 | `tgui/packages/tgui/interfaces/NtosMessenger/` | Completo | App de mensagens do PDA (index + ChatScreen) — contatos, busca, conversas, anexos, "enviar para todos", dimmers |
 | `tgui/packages/tgui/interfaces/PreferencesMenu/` | Parcial | Navegação/chrome — abas de personagem/jogo, perfis, controles do editor, busca, categorias de prefs de jogo, popup de exclusão e nomes alternativos. **Rótulos individuais de cada preferência (`feature.name`) ficam em inglês (lote futuro).** |
+| `tgui/packages/tgui/interfaces/NtosNotepad.tsx` | Completo | App de bloco de notas do PDA — barra de menus (Arquivo/Editar/Formatar/Exibir/Ajuda + itens), barra de status, diálogo "Sobre", popup de alterações não salvas. Branding/versão (NtOS, NT Corporation) mantidos em inglês |
+| `tgui/packages/tgui/interfaces/NtosNetDownloader.tsx` | Completo | App de download de programas — disco rígido, busca, progresso, botões de estado (Instalado/Incompatível/Sem Acesso/Sem Espaço), aviso de fonte não verificada. Categorias via `t(category)` |
+| `tgui/packages/tgui/interfaces/NtosFileManager.tsx` | Completo | Gerenciador de arquivos do PDA — diálogo de impressão (formatos, deslocamentos), tabela de arquivos (cabeçalhos, tooltips de ação), seção "Disco de Dados" |
 
 ## Decisões de Design
 
@@ -80,7 +83,8 @@
 - [x] NtOS/PDA — tela inicial (`NtosMain`) + app de mensagens (`NtosMessenger`)
 - [x] PreferencesMenu — navegação/chrome (abas, perfis, editor de personagem, busca, categorias de prefs)
 - [ ] PreferencesMenu — rótulos individuais de cada preferência (`feature.name`/descrições) e antagonistas
-- [ ] Demais apps NtOS (Notepad, NetDownloader, Records, etc.)
+- [x] Apps NtOS — Notepad, NetDownloader, FileManager (utilitários principais)
+- [ ] Demais apps NtOS (Records, Crew Manifest, NetMonitor, Card, Status, etc.)
 - [ ] Balloon alerts — aplicar `T()` nos mais comuns
 - [ ] Job display names — aplicar nos contextos de display
 
@@ -97,6 +101,8 @@
 > **Nota sobre `NtosMain`/`NtosMessenger` (PDA):** traduzida a **interface fixa** do PDA — menu principal, seção "Details", lista de "Programs", e todo o app SpaceMessenger (contatos, busca, conversa, anexos, dimmers de erro). **Nomes/descrições de apps (`app.desc`, `program.desc`), nível de alerta (`alert_name`), nomes e cargos vêm do servidor e ficam em inglês (Fase 3).** Mantidos em inglês: marcas/versões (**SpaceMessenger V6.5.x**, **NtOS**, **Syndix**), siglas (**PDA, ID, pAI, NT**). `ChatScreen.tsx` é um **componente de classe** (React `Component`), então usa a função autônoma `import { t } from '../../i18n'` em vez do hook `useTranslation()` — `t()` lê o locale do `store` em tempo de render e o full update do servidor já re-renderiza a árvore ao trocar de idioma. Pluralização de "unread message(s)" feita com duas chaves; botões alternados (`Ringer: On/Off`, `Send / Receive`, `Sort by: {mode}`, `Attach Virus: {state}`) usam chaves separadas ou interpolação.
 
 > **Nota sobre `PreferencesMenu/`:** traduzido o **chrome/navegação** (alta visibilidade — todo jogador passa por aqui): abas de Personagem (`Character`, `Occupations`, `Antagonists`, `Quirks and Personality`) e de Jogo (`Settings`, `Keybindings`), perfis de personagem (`New Character`), controles do editor (tooltips `Rotate`/`Species`/`Gender`/`Delete Character`), busca de aparência (`Select {name}`), popup de exclusão (`DeleteCharacterPopup`) e nomes alternativos (`names.tsx`). **As categorias de preferências de jogo (`feature.category`) são exibidas via `t(category)` no `TabbedMenu`** — só os rótulos de exibição (botão de aba e título da `Section`); as chaves de `categoryRefs`/`key` continuam usando a string **original em inglês** (igual ao padrão de Vending). Categorias traduzidas: `ACCESSIBILITY`→ACESSIBILIDADE, `GAMEPLAY`→JOGABILIDADE, `SOUND`→SOM, `TOOLTIPS`→DICAS; mantidas em inglês (fallback automático, sem chave): `ADMIN`, `CHAT`, `GHOST`, `RUNECHAT`, `UI`. **Os rótulos individuais de cada preferência (`feature.name`) e descrições — definidos nos arquivos TS de `preferences/features/*` — ainda ficam em inglês**, assim como `Loadout` e `Quirks` (termos de jogo). O `title` em `PreferencesMenu/index.tsx` é código morto (não renderizado), então não foi tocado.
+
+> **Nota sobre apps NtOS (`NtosNotepad`/`NtosNetDownloader`/`NtosFileManager`):** traduzida a **interface fixa** de três utilitários principais do PDA. Todos usam o hook `useTranslation()` — incluindo subcomponentes (`NtosNotepadMenuBar`, `StatusBar`, `AboutDialog`, `Program`, `FileTable`, `PrintDialog`), que chamam o hook individualmente. **Notepad:** barra de menus estilo Windows (`File`→Arquivo, `Edit`→Editar, `Format`→Formatar, `View`→Exibir, `Help`→Ajuda) e itens (`New`/`Cut`/`Copy`/`Paste`/`Word Wrap`/`Status Bar`); o `value` interno (`'new'`, `'cut'`, etc.) continua em inglês — só o `displayText` é traduzido. O `PartiallyUnderlined` (sublinhado decorativo de atalho) é cosmético, então traduzir o texto é seguro. `Untitled`→"Sem título" via `t(documentName)`; o nome da app **Notepad** e branding (NtOS, NT Corporation, versão) ficam em inglês. **NetDownloader:** as categorias (`#define PROGRAM_CATEGORY_*` em `code/__DEFINES/modular_computer.dm`) vêm do servidor e são exibidas via `t(category)` — a comparação lógica (`category === selectedCategory`) usa o `name` original; chaves adicionadas: `Device Tools`, `Games`, `Security & Records`, `Engineering`, `Supply`, `Science` (`Equipment` já existia). **FileManager:** `displayText` dos formatos de impressão e `file.type` vêm do servidor (inglês). Strings interpoladas (`Ln {line}, Col {column}`, `{free} GQ free of {total} GQ`, `Downloading: {name}.prg ({percent}%)`) passam parâmetros como string via `String(...)`. **Nomes/descrições de programas (`filedesc`/`fileinfo`) vêm do servidor e ficam em inglês (Fase 3).**
 
 ### Fase 3 — Gameplay
 - [ ] Nomes e descrições de itens
