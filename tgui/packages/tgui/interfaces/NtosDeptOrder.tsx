@@ -14,6 +14,7 @@ import {
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 // 3.5x crate value, 10 minutes
@@ -46,6 +47,7 @@ type Info = {
 };
 
 const CooldownEstimate = (props) => {
+  const { t } = useTranslation();
   const { cost } = props;
   const cooldownColor =
     (cost >= COST_VERY_LONG_BOUND && 'red') ||
@@ -59,13 +61,14 @@ const CooldownEstimate = (props) => {
     'short';
   return (
     <Box as="span" textColor={cooldownColor}>
-      {cooldownText} cooldown.
+      {t('{text} cooldown.', { text: t(cooldownText) })}
     </Box>
   );
 };
 
 export const DepartmentOrderContent = (props) => {
   const { data } = useBackend<Info>();
+  const { t } = useTranslation();
   const { no_link, time_left } = data;
   if (!data) {
     return null;
@@ -84,11 +87,9 @@ export const DepartmentOrderContent = (props) => {
         <Stack fill vertical>
           <Stack.Item>
             <NoticeBox info>
-              As employees of Nanotrasen, the selection of orders here are
-              completely free of charge, only incurring a cooldown on the
-              service. Cheaper items will make you wait for less time before
-              Nanotrasen allows another purchase, to encourage tasteful
-              spending.
+              {t(
+                'As employees of Nanotrasen, the selection of orders here are completely free of charge, only incurring a cooldown on the service. Cheaper items will make you wait for less time before Nanotrasen allows another purchase, to encourage tasteful spending.',
+              )}
             </NoticeBox>
           </Stack.Item>
           <Stack.Item grow>
@@ -101,8 +102,9 @@ export const DepartmentOrderContent = (props) => {
 };
 
 export const NtosDeptOrder = () => {
+  const { t } = useTranslation();
   return (
-    <NtosWindow title="Department Orders" width={620} height={580}>
+    <NtosWindow title={t('Department Orders')} width={620} height={580}>
       <NtosWindow.Content>
         <DepartmentOrderContent />
       </NtosWindow.Content>
@@ -112,6 +114,7 @@ export const NtosDeptOrder = () => {
 
 const CooldownDimmer = () => {
   const { act, data } = useBackend<Info>();
+  const { t } = useTranslation();
   const { can_override, time_left } = data;
   return (
     <Dimmer>
@@ -120,7 +123,7 @@ const CooldownDimmer = () => {
           <Icon color="bug" name="route" size={20} />
         </Stack.Item>
         <Stack.Item fontSize="18px" color="orange">
-          Ready for another order in {time_left}...
+          {t('Ready for another order in {time}...', { time: time_left })}
         </Stack.Item>
         <Stack.Item textAlign="center" color="orange">
           <Button
@@ -128,15 +131,15 @@ const CooldownDimmer = () => {
             lineHeight={2}
             tooltip={
               (!!can_override &&
-                'This action requires Head of Staff access!') ||
-              'Crate already shipped! No cancelling now!'
+                t('This action requires Head of Staff access!')) ||
+              t('Crate already shipped! No cancelling now!')
             }
             fontSize="14px"
             color="red"
             disabled={!can_override}
             onClick={() => act('override_order')}
           >
-            <Box fontSize="22px">Override</Box>
+            <Box fontSize="22px">{t('Override')}</Box>
           </Button>
         </Stack.Item>
       </Stack>
@@ -146,6 +149,7 @@ const CooldownDimmer = () => {
 
 const NoLinkDimmer = () => {
   const { act, data } = useBackend<Info>();
+  const { t } = useTranslation();
   const { id_inside } = data;
   return (
     <Dimmer>
@@ -156,11 +160,11 @@ const NoLinkDimmer = () => {
           </Blink>
         </Stack.Item>
         <Stack.Item textAlign="center" fontSize="22px" color="red">
-          Unlinked!
+          {t('Unlinked!')}
         </Stack.Item>
         <Stack.Item textAlign="center" fontSize="14px" color="red">
           <Button disabled={!id_inside} onClick={() => act('link')}>
-            Please insert a silver Head of Staff ID and press to continue.
+            {t('Please insert a silver Head of Staff ID and press to continue.')}
           </Button>
         </Stack.Item>
       </Stack>
@@ -170,6 +174,7 @@ const NoLinkDimmer = () => {
 
 const DepartmentCatalog = () => {
   const { act, data } = useBackend<Info>();
+  const { t } = useTranslation();
   const { supplies } = data;
   const [tabCategory, setTabCategory] = useState(supplies[0]);
 
@@ -216,7 +221,7 @@ const DepartmentCatalog = () => {
                         })
                       }
                     >
-                      Order
+                      {t('Order')}
                     </Button>
                   </Stack.Item>
                 </Stack>
