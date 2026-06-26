@@ -8,13 +8,15 @@ import {
 } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 export const NtosCivCargoHoldTerminal = (props) => {
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   const { status_report, id_inserted, id_bounty_info, picking } = data;
-  const in_text = 'Welcome valued employee.';
-  const out_text = 'To begin, insert your ID into the console.';
+  const in_text = t('Welcome valued employee.');
+  const out_text = t('To begin, insert your ID into the console.');
   return (
     <NtosWindow width={580} height={375}>
       <NtosWindow.Content scrollable>
@@ -24,19 +26,21 @@ export const NtosCivCargoHoldTerminal = (props) => {
               {id_inserted ? in_text : out_text}
             </NoticeBox>
             <Section
-              title="Bounty Choice"
+              title={t('Bounty Choice')}
               buttons={
                 <Button
                   icon={id_bounty_info ? 'recycle' : 'pen'}
                   color={id_bounty_info ? 'green' : 'default'}
-                  tooltip={id_bounty_info ? 'Replace Bounty' : 'New Bounty'}
+                  tooltip={
+                    id_bounty_info ? t('Replace Bounty') : t('New Bounty')
+                  }
                   disabled={!id_inserted}
                   onClick={() => act('bounty')}
                 />
               }
             >
               <LabeledList>
-                <LabeledList.Item label="Cargo Report">
+                <LabeledList.Item label={t('Cargo Report')}>
                   {status_report}
                 </LabeledList.Item>
               </LabeledList>
@@ -51,18 +55,19 @@ export const NtosCivCargoHoldTerminal = (props) => {
 
 const BountyTextBox = (props) => {
   const { data } = useBackend();
+  const { t } = useTranslation();
   const { id_bounty_info, id_bounty_value, id_bounty_num } = data;
-  const na_text = 'N/A, please add a new bounty.';
+  const na_text = t('N/A, please add a new bounty.');
   return (
-    <Section title="Bounty Info">
+    <Section title={t('Bounty Info')}>
       <LabeledList>
-        <LabeledList.Item label="Description">
+        <LabeledList.Item label={t('Description')}>
           {id_bounty_info ? id_bounty_info : na_text}
         </LabeledList.Item>
-        <LabeledList.Item label="Quantity">
+        <LabeledList.Item label={t('Quantity')}>
           {id_bounty_info ? id_bounty_num : 'N/A'}
         </LabeledList.Item>
-        <LabeledList.Item label="Value">
+        <LabeledList.Item label={t('Value')}>
           {id_bounty_info ? id_bounty_value : 'N/A'}
         </LabeledList.Item>
       </LabeledList>
@@ -72,9 +77,10 @@ const BountyTextBox = (props) => {
 
 const BountyPickBox = (props) => {
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   const { id_bounty_names, id_bounty_infos, id_bounty_values } = data;
   return (
-    <Section title="Please Select a Bounty:" textAlign="center">
+    <Section title={t('Please Select a Bounty:')} textAlign="center">
       <Flex width="100%" wrap>
         <Flex.Item shrink={0} grow={0.5}>
           <BountyPickButton
@@ -109,6 +115,7 @@ const BountyPickBox = (props) => {
 };
 
 const BountyPickButton = (props) => {
+  const { t } = useTranslation();
   return (
     <Button
       fluid
@@ -132,7 +139,9 @@ const BountyPickButton = (props) => {
       >
         {props.bounty_info}
       </Box>
-      <Box>Payout: {props.bounty_value} cr</Box>
+      <Box>
+        {t('Payout: {value} cr', { value: String(props.bounty_value) })}
+      </Box>
     </Button>
   );
 };

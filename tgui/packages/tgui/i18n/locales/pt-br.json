@@ -556,5 +556,17 @@
 	"Integrity": "Integridade",
 	"RECONSTRUCTION IN PROGRESS": "RECONSTRUÇÃO EM ANDAMENTO",
 	"Begin Reconstruction": "Iniciar Reconstrução",
-	"Laws": "Leis"
+	"Laws": "Leis",
+	"Welcome valued employee.": "Bem-vindo, prezado funcionário.",
+	"To begin, insert your ID into the console.": "Para começar, insira sua ID no console.",
+	"Bounty Choice": "Escolha de Recompensa",
+	"Replace Bounty": "Substituir Recompensa",
+	"New Bounty": "Nova Recompensa",
+	"Cargo Report": "Relatório de Cargo",
+	"N/A, please add a new bounty.": "N/A, adicione uma nova recompensa.",
+	"Bounty Info": "Informações da Recompensa",
+	"Quantity": "Quantidade",
+	"Value": "Valor",
+	"Please Select a Bounty:": "Selecione uma Recompensa:",
+	"Payout: {value} cr": "Pagamento: {value} cr"
 }
