@@ -2,6 +2,7 @@ import { sortBy } from 'es-toolkit';
 import { Button, Section, Stack } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { Window } from '../layouts';
 
 export const StationAlertConsole = (props) => {
@@ -18,6 +19,7 @@ export const StationAlertConsole = (props) => {
 
 export const StationAlertConsoleContent = (props) => {
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   const { cameraView } = data;
 
   const sortingKey = {
@@ -36,10 +38,13 @@ export const StationAlertConsoleContent = (props) => {
   return (
     <>
       {sortedAlarms.map((category) => (
-        <Section key={category.name} title={`${category.name} Alarms`}>
+        <Section
+          key={category.name}
+          title={t('{category} Alarms', { category: t(category.name) })}
+        >
           <ul>
             {category.alerts.length === 0 && (
-              <li className="color-good">Systems nominal</li>
+              <li className="color-good">{t('Systems nominal')}</li>
             )}
             {category.alerts.map((alert) => (
               <Stack key={alert.name} height="30px" align="baseline">
@@ -47,7 +52,9 @@ export const StationAlertConsoleContent = (props) => {
                   <li className="color-average">
                     {alert.name}{' '}
                     {!!cameraView && alert.sources > 1
-                      ? ` (${alert.sources} sources)`
+                      ? t(' ({sources} sources)', {
+                          sources: String(alert.sources),
+                        })
                       : ''}
                   </li>
                 </Stack.Item>
@@ -60,10 +67,12 @@ export const StationAlertConsoleContent = (props) => {
                       disabled={!alert.cameras}
                       content={
                         alert.cameras === 1
-                          ? `${alert.cameras} Camera`
+                          ? t('{count} Camera', { count: String(alert.cameras) })
                           : alert.cameras > 1
-                            ? `${alert.cameras} Cameras`
-                            : 'No Camera'
+                            ? t('{count} Cameras', {
+                                count: String(alert.cameras),
+                              })
+                            : t('No Camera')
                       }
                       onClick={() =>
                         act('select_camera', {

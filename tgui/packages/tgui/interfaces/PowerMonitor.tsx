@@ -16,6 +16,7 @@ import {
 import { toFixed } from 'tgui-core/math';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { Window } from '../layouts';
 import { LoadingScreen } from './common/LoadingScreen';
 
@@ -79,10 +80,11 @@ const PEAK_DRAW = 500000;
 
 export function PowerMonitorContent(props) {
   const { data } = useBackend<Data>();
+  const { t } = useTranslation();
   const { history } = data;
 
   if (!history) {
-    return 'Loading...';
+    return t('Loading...');
   }
 
   const supply = history.supply[history.supply.length - 1] || 0;
@@ -104,7 +106,7 @@ export function PowerMonitorContent(props) {
           <Flex.Item mx={0.5} width="200px">
             <Section>
               <LabeledList>
-                <LabeledList.Item label="Supply">
+                <LabeledList.Item label={t('Supply')}>
                   <ProgressBar
                     value={supply}
                     minValue={0}
@@ -114,7 +116,7 @@ export function PowerMonitorContent(props) {
                     {`${toFixed(supply / 1000)} kW`}
                   </ProgressBar>
                 </LabeledList.Item>
-                <LabeledList.Item label="Draw">
+                <LabeledList.Item label={t('Draw')}>
                   <ProgressBar
                     value={demand}
                     minValue={0}
@@ -158,6 +160,7 @@ export function PowerMonitorContent(props) {
 
 function StationAreas(props) {
   const { data } = useBackend<Data>();
+  const { t } = useTranslation();
 
   const [sortByField, setSortByField] = useState('');
 
@@ -185,13 +188,13 @@ function StationAreas(props) {
       <Section height={3}>
         <Box>
           <Box inline mr={2} color="label">
-            Sort by:
+            {t('Sort by:')}
           </Box>
           <Button.Checkbox
             checked={sortByField === 'name'}
             onClick={() => setSortByField(sortByField !== 'name' ? 'name' : '')}
           >
-            Name
+            {t('Name')}
           </Button.Checkbox>
           <Button.Checkbox
             checked={sortByField === 'charge'}
@@ -199,13 +202,13 @@ function StationAreas(props) {
               setSortByField(sortByField !== 'charge' ? 'charge' : '')
             }
           >
-            Charge
+            {t('Charge')}
           </Button.Checkbox>
           <Button.Checkbox
             checked={sortByField === 'draw'}
             onClick={() => setSortByField(sortByField !== 'draw' ? 'draw' : '')}
           >
-            Draw
+            {t('Draw')}
           </Button.Checkbox>
         </Box>
       </Section>
@@ -214,18 +217,18 @@ function StationAreas(props) {
         <Section fill scrollable>
           <Table>
             <Table.Row header>
-              <Table.Cell>Area</Table.Cell>
-              <Table.Cell collapsing>Charge</Table.Cell>
+              <Table.Cell>{t('Area')}</Table.Cell>
+              <Table.Cell collapsing>{t('Charge')}</Table.Cell>
               <Table.Cell textAlign="right" width={7}>
-                Draw
+                {t('Draw')}
               </Table.Cell>
-              <Tooltip content="Equipment power">
+              <Tooltip content={t('Equipment power')}>
                 <Table.Cell collapsing>Eqp</Table.Cell>
               </Tooltip>
-              <Tooltip content="Lighting power">
+              <Tooltip content={t('Lighting power')}>
                 <Table.Cell collapsing>Lgt</Table.Cell>
               </Tooltip>
-              <Tooltip content="Environment power">
+              <Tooltip content={t('Environment power')}>
                 <Table.Cell collapsing>Env</Table.Cell>
               </Tooltip>
             </Table.Row>
@@ -301,11 +304,12 @@ type AreaStatusColorBoxProps = {
 };
 
 function AreaStatusColorBox(props: AreaStatusColorBoxProps) {
+  const { t } = useTranslation();
   const { status } = props;
 
   const power = Boolean(status & 2);
   const mode = Boolean(status & 1);
-  const tooltipText = `${power ? 'On' : 'Off'} [${mode ? 'auto' : 'manual'}]`;
+  const tooltipText = `${power ? t('On') : t('Off')} [${mode ? 'auto' : 'manual'}]`;
 
   return (
     <Tooltip content={tooltipText}>

@@ -8,6 +8,7 @@ import {
 } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
+import { useTranslation } from '../i18n/useTranslation';
 import { NtosWindow } from '../layouts';
 
 export const NtosJobManager = (props) => {
@@ -22,11 +23,12 @@ export const NtosJobManager = (props) => {
 
 export const NtosJobManagerContent = (props) => {
   const { act, data } = useBackend();
+  const { t } = useTranslation();
   const { authed, cooldown, slots = [], prioritized = [] } = data;
   if (!authed) {
     return (
       <NoticeBox>
-        Current ID does not have access permissions to change job slots.
+        {t('Current ID does not have access permissions to change job slots.')}
       </NoticeBox>
     );
   }
@@ -35,14 +37,14 @@ export const NtosJobManagerContent = (props) => {
       {cooldown > 0 && (
         <Dimmer>
           <Box bold textAlign="center" fontSize="20px">
-            On Cooldown: {cooldown}s
+            {t('On Cooldown: {seconds}s', { seconds: String(cooldown) })}
           </Box>
         </Dimmer>
       )}
       <Table>
         <Table.Row header>
-          <Table.Cell>Prioritized</Table.Cell>
-          <Table.Cell>Slots</Table.Cell>
+          <Table.Cell>{t('Prioritized')}</Table.Cell>
+          <Table.Cell>{t('Slots')}</Table.Cell>
         </Table.Row>
         {slots.map((slot) => (
           <Table.Row key={slot.title} className="candystripe">
@@ -64,7 +66,7 @@ export const NtosJobManagerContent = (props) => {
             </Table.Cell>
             <Table.Cell collapsing>
               <Button
-                content="Open"
+                content={t('Open')}
                 disabled={!slot.status_open}
                 onClick={() =>
                   act('PRG_open_job', {
@@ -73,7 +75,7 @@ export const NtosJobManagerContent = (props) => {
                 }
               />
               <Button
-                content="Close"
+                content={t('Close')}
                 disabled={!slot.status_close}
                 onClick={() =>
                   act('PRG_close_job', {

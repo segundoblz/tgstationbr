@@ -3,8 +3,18 @@
 ## Status Geral
 
 - **Fase atual:** Fase 2 (Tradução de UI) em andamento
-- **Strings traduzidas:** ~455 (UI base + VotePanel/Vending/Cargo/Crafting + PDA/Messenger + PreferencesMenu + apps NtOS Notepad/NetDownloader/FileManager + Records/CrewManifest/NetMonitor/Card/Status)
+- **Strings traduzidas:** ~480 (UI base + VotePanel/Vending/Cargo/Crafting + PDA/Messenger + PreferencesMenu + apps NtOS + PowerMonitor/Signaler/StationAlertConsole/JobManager/AccessList)
 - **Total estimado:** ~10.000-15.000 strings
+
+## Progresso por Fase
+
+> Estimativas aproximadas. A Fase 2 é medida por **arquivos de interface tgui com i18n aplicado** (43 de 754 ≈ 6%). A cobertura por "uso real" é maior, pois priorizamos as interfaces de maior visibilidade (inputs, votação, vending, cargo, crafting, PDA, preferências).
+
+| Fase | Escopo | Concluído | Restante |
+|---|---|---|---|
+| **Fase 1 — Infraestrutura** | Sistema i18n (DM + TGUI), preferência de idioma, loader, hook | **100%** | **0%** |
+| **Fase 2 — Tradução de UI** | Interfaces tgui (43/754 arquivos) + JSONs DM (ui/balloon/jobs/chat) | **~6%** | **~94%** |
+| **Fase 3 — Gameplay** | Nomes/descrições de itens, `to_chat`/`visible_message`, examine, flavor text | **0%** | **100%** |
 
 ## Infraestrutura
 
@@ -28,7 +38,7 @@
 | `strings/translations/pt-br/balloon.json` | ~47 | Completo (balloon alerts comuns) |
 | `strings/translations/pt-br/jobs_display.json` | ~43 | Completo (jobs principais) |
 | `strings/translations/pt-br/chat.json` | ~13 | Parcial (mensagens básicas) |
-| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~435 | Completo (base + inputs + votação + vending + cargo + crafting + PDA/messenger + preferências + apps NtOS + records/manifest/netmonitor/card/status) |
+| `tgui/packages/tgui/i18n/locales/pt-br.json` | ~462 | Completo (base + inputs + votação + vending + cargo + crafting + PDA/messenger + preferências + apps NtOS + records/manifest/netmonitor/card/status + power/signaler/alertas/jobmanager/access) |
 
 ## Arquivos Traduzidos
 
@@ -58,6 +68,11 @@
 | `tgui/packages/tgui/interfaces/NtosRecords.jsx` | Completo | Registros de pessoal (segurança/médico) — cabeçalho, filtro e rótulos de campo (Cargo, Tipo Sanguíneo, Status Criminal, etc.). Valores dos registros vêm do servidor (inglês) |
 | `tgui/packages/tgui/interfaces/NtosCard.tsx` | Parcial | Console de ID do PDA — login/inserir ID, detalhes (nome/idade/cargo), modelos, impressão, encerrar contrato. **`AccessList` (componente compartilhado de acessos) ainda em inglês — lote futuro.** |
 | `tgui/packages/tgui/interfaces/common/StatusDisplayControls.tsx` | Completo | Controles de display de status (compartilhado por `NtosStatus` e `CommunicationsConsole/ChangingStatus`) — botões de imagem (Logo, Risco Biológico, Radiação), mensagem e envio |
+| `tgui/packages/tgui/interfaces/common/AccessList.jsx` | Completo | Lista de acessos (compartilhado por `NtosCard`, `IdentificationComputer` e consoles de ID) — título "Acessos". Regiões/acessos e `trim`/wildcards vêm do servidor (inglês) |
+| `tgui/packages/tgui/interfaces/PowerMonitor.tsx` | Completo | Monitor de energia (compartilhado por `NtosPowerMonitor` + console standalone) — fornecimento/consumo, ordenação, tabela de áreas (carga, tooltips Eqp/Lgt/Env), status On/Off |
+| `tgui/packages/tgui/interfaces/Signaler.tsx` | Completo | Sinalizador (compartilhado por `NtosSignaler` + dispositivo standalone) — frequência, código, reset, enviar sinal, tooltip de tempo de espera |
+| `tgui/packages/tgui/interfaces/StationAlertConsole.jsx` | Completo | Console de alertas da estação (compartilhado por `NtosStationAlertConsole` + console standalone) — títulos por categoria (Fogo/Atmosfera/Energia/Arrombamento/Movimento/Câmera), "Sistemas normais", contadores de fontes/câmeras |
+| `tgui/packages/tgui/interfaces/NtosJobManager.jsx` | Completo | Gerenciador de vagas de cargo do PDA — aviso de acesso, tempo de espera, cabeçalhos (Priorizado/Vagas), botões Abrir/Fechar. Nomes de cargo vêm do servidor (inglês) |
 
 ## Decisões de Design
 
@@ -90,7 +105,8 @@
 - [ ] PreferencesMenu — rótulos individuais de cada preferência (`feature.name`/descrições) e antagonistas
 - [x] Apps NtOS — Notepad, NetDownloader, FileManager (utilitários principais)
 - [x] Apps NtOS — Records, Crew Manifest, NetMonitor, Card, Status (consoles de informação/ID)
-- [ ] Demais apps NtOS (Newscaster, Radar, RoboControl, JobManager, PowerMonitor, etc.)
+- [x] Componentes compartilhados — AccessList, PowerMonitor, Signaler, StationAlertConsole (NtOS + máquinas standalone) + NtosJobManager
+- [ ] Demais apps NtOS (Newscaster, Radar, RoboControl, SpaceBetting, GasAnalyzer, etc.)
 - [ ] Balloon alerts — aplicar `T()` nos mais comuns
 - [ ] Job display names — aplicar nos contextos de display
 
@@ -109,6 +125,8 @@
 > **Nota sobre `PreferencesMenu/`:** traduzido o **chrome/navegação** (alta visibilidade — todo jogador passa por aqui): abas de Personagem (`Character`, `Occupations`, `Antagonists`, `Quirks and Personality`) e de Jogo (`Settings`, `Keybindings`), perfis de personagem (`New Character`), controles do editor (tooltips `Rotate`/`Species`/`Gender`/`Delete Character`), busca de aparência (`Select {name}`), popup de exclusão (`DeleteCharacterPopup`) e nomes alternativos (`names.tsx`). **As categorias de preferências de jogo (`feature.category`) são exibidas via `t(category)` no `TabbedMenu`** — só os rótulos de exibição (botão de aba e título da `Section`); as chaves de `categoryRefs`/`key` continuam usando a string **original em inglês** (igual ao padrão de Vending). Categorias traduzidas: `ACCESSIBILITY`→ACESSIBILIDADE, `GAMEPLAY`→JOGABILIDADE, `SOUND`→SOM, `TOOLTIPS`→DICAS; mantidas em inglês (fallback automático, sem chave): `ADMIN`, `CHAT`, `GHOST`, `RUNECHAT`, `UI`. **Os rótulos individuais de cada preferência (`feature.name`) e descrições — definidos nos arquivos TS de `preferences/features/*` — ainda ficam em inglês**, assim como `Loadout` e `Quirks` (termos de jogo). O `title` em `PreferencesMenu/index.tsx` é código morto (não renderizado), então não foi tocado.
 
 > **Nota sobre apps NtOS (`NtosNotepad`/`NtosNetDownloader`/`NtosFileManager`):** traduzida a **interface fixa** de três utilitários principais do PDA. Todos usam o hook `useTranslation()` — incluindo subcomponentes (`NtosNotepadMenuBar`, `StatusBar`, `AboutDialog`, `Program`, `FileTable`, `PrintDialog`), que chamam o hook individualmente. **Notepad:** barra de menus estilo Windows (`File`→Arquivo, `Edit`→Editar, `Format`→Formatar, `View`→Exibir, `Help`→Ajuda) e itens (`New`/`Cut`/`Copy`/`Paste`/`Word Wrap`/`Status Bar`); o `value` interno (`'new'`, `'cut'`, etc.) continua em inglês — só o `displayText` é traduzido. O `PartiallyUnderlined` (sublinhado decorativo de atalho) é cosmético, então traduzir o texto é seguro. `Untitled`→"Sem título" via `t(documentName)`; o nome da app **Notepad** e branding (NtOS, NT Corporation, versão) ficam em inglês. **NetDownloader:** as categorias (`#define PROGRAM_CATEGORY_*` em `code/__DEFINES/modular_computer.dm`) vêm do servidor e são exibidas via `t(category)` — a comparação lógica (`category === selectedCategory`) usa o `name` original; chaves adicionadas: `Device Tools`, `Games`, `Security & Records`, `Engineering`, `Supply`, `Science` (`Equipment` já existia). **FileManager:** `displayText` dos formatos de impressão e `file.type` vêm do servidor (inglês). Strings interpoladas (`Ln {line}, Col {column}`, `{free} GQ free of {total} GQ`, `Downloading: {name}.prg ({percent}%)`) passam parâmetros como string via `String(...)`. **Nomes/descrições de programas (`filedesc`/`fileinfo`) vêm do servidor e ficam em inglês (Fase 3).**
+
+> **Nota sobre componentes compartilhados (`AccessList`/`PowerMonitor`/`Signaler`/`StationAlertConsole`) e `NtosJobManager`:** lote focado em componentes **reutilizados** — cada um é a base tanto do app NtOS quanto da máquina/console standalone (ex.: `PowerMonitor` serve `NtosPowerMonitor` e o monitor de energia físico; `AccessList` serve `NtosCard`, o computador de ID e demais consoles de acesso). Traduzir uma vez beneficia ambos. Todos usam o hook `useTranslation()` em cada subcomponente. **AccessList:** só o título "Acessos"; regiões, nomes de acesso, `trim` e `wildcards` vêm do servidor/são mecânicas (inglês). **PowerMonitor:** fornecimento/consumo (`Supply`/`Draw`), ordenação, cabeçalhos de tabela; abreviações de coluna `Eqp`/`Lgt`/`Env` mantidas (tooltips traduzidos); `area.name` do servidor; `auto`/`manual` idênticos em PT. **Signaler:** frequência/código/sinal; tooltip de tempo de espera interpolado. **StationAlertConsole:** os nomes de categoria (`Fire`/`Atmosphere`/`Power`/`Burglar`/`Motion`/`Camera`) são um **enum fixo do console** e foram traduzidos via `t(category.name)` aninhado em `t('{category} Alarms', ...)` → "Alarmes de Fogo"; a lógica de ordenação (`sortingKey`) continua usando o nome **original em inglês**. Pluralização de "Camera/Cameras" e contagem de "sources" feitas com chaves/params. **NtosJobManager:** aviso de acesso, tempo de espera, cabeçalhos e botões Abrir/Fechar; `slot.title` (nome do cargo) vem do servidor (inglês).
 
 > **Nota sobre apps NtOS de informação (`NtosCrewManifest`/`NtosNetMonitor`/`NtosRecords`/`NtosCard`) e `StatusDisplayControls`:** segundo lote de apps do PDA, traduzida a **interface fixa**. Todos usam o hook `useTranslation()`, inclusive subcomponentes (`MainPage`/`TabletPage` em NetMonitor; `LoginPage`/`IdCardPage`/`TemplateDropdown` em Card), que chamam o hook individualmente. **CrewManifest:** só título e botão; nomes de departamento/tripulantes e cargos vêm do servidor (inglês). **NetMonitor:** abas (`NtNet`/`Tablets` mantidos — termos de marca/empréstimo), avisos, conectividade, sistemas de segurança e log; `relay.name`/`tablet.name`/`log.entry` vêm do servidor. `ENABLED`/`DISABLED` em maiúsculas usam chaves próprias (distintas de `Enabled`/`Disabled`). **Records:** cabeçalho, filtro e **rótulos de campo** traduzidos via `{t('Rank')}: {value}` (label traduzido, valor do servidor em inglês); `DELETED` como fallback de status criminal. **Card:** parcial — login/inserção de ID, detalhes, modelos, impressão e "Encerrar Contrato"; o componente compartilhado **`AccessList`** (regiões/acessos, usado por vários consoles de segurança) **fica em inglês** e merece lote próprio; `trim`, `ID Painter` e `wildcards` mantidos em inglês (mecânicas/itens). **StatusDisplayControls** é **compartilhado** por `NtosStatus` e `CommunicationsConsole/ChangingStatus` — traduzir uma vez beneficia ambos; mantidos em inglês: `Logo` (idêntico) e `Lockdown` (jargão de estação, como `shuttle`).
 
